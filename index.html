@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1016">
+<title>OSCE MED Y4 — ทวน 5 ชั่วโมง</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
+<style>
+:root{--bg:#0d1016;--pnl:#161a23;--pnl2:#1d222e;--ln:#2b3242;--tx:#e7eaf0;--dim:#959db0;
+--acc:#5eb3ff;--warn:#ffb454;--bad:#ff7b72;--good:#7ee787;--gold:#f5c451}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",Sarabun,sans-serif;
+-webkit-text-size-adjust:100%;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:800px;margin:0 auto;padding:14px 14px 100px}
+h1{font-size:21px;margin:8px 0 2px;text-align:center}
+.sub{color:var(--dim);font-size:13px;text-align:center;margin-bottom:12px}
+.panel{background:var(--pnl);border:1px solid var(--ln);border-radius:14px;padding:13px 15px;margin:12px 0}
+.panel.now{border-color:var(--gold);box-shadow:0 0 0 1px rgba(245,196,81,.35)}
+.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.mode{background:var(--pnl);border:1px solid var(--ln);border-radius:14px;padding:11px 10px;text-align:left;color:var(--tx);
+font-family:inherit;cursor:pointer;display:block}
+.mode:hover{border-color:var(--acc)}
+.mode b{display:block;font-size:14.5px;margin:2px 0 0}
+.mode span{color:var(--dim);font-size:12px}
+.mode .ic{font-size:20px}
+.bh{display:flex;align-items:baseline;gap:8px}
+.bh b{flex:1;font-size:15px}
+.tm{font-size:12px;color:var(--gold);font-weight:700;white-space:nowrap}
+.bp{font-size:12px;color:var(--dim);white-space:nowrap}
+.bd{font-size:12.5px;color:var(--dim);margin:2px 0 6px}
+.row{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--ln);cursor:pointer}
+.row:last-child{border-bottom:0}
+.row:hover .tx{color:var(--acc)}
+.row .tx{flex:1;min-width:0;font-size:14px}
+.row .tx small{color:var(--dim);display:block;font-size:12px}
+.ch{flex:0 0 auto;min-width:46px;text-align:center;font-size:12px;font-weight:700;border-radius:8px;padding:3px 6px}
+.ch.hot{background:#3b2a10;color:var(--gold)} .ch.mid{background:#2a2235;color:#d2a8ff} .ch.low{background:var(--pnl2);color:var(--dim)}
+.stt{flex:0 0 auto;font-size:12.5px;font-weight:700;min-width:44px;text-align:right}
+.stt.ok{color:var(--good)} .stt.part{color:var(--warn)} .stt.seen{color:var(--acc)} .stt.no{color:#4b5468}
+.bar{height:8px;background:var(--pnl2);border-radius:6px;overflow:hidden;margin:6px 0 2px;display:flex}
+.bar i{display:block;height:100%}
+.bar .g{background:var(--good)} .bar .r{background:var(--bad)}
+.stat{display:flex;justify-content:space-between;font-size:13px;color:var(--dim)}
+.btn{display:block;width:100%;background:var(--acc);color:#07131f;border:0;border-radius:12px;padding:12px;font-size:15px;
+font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;text-align:center}
+.btn.ghost{background:var(--pnl2);color:var(--tx);border:1px solid var(--ln);font-weight:500}
+.btn.sm{display:inline-block;width:auto;padding:8px 14px;font-size:13.5px;margin:4px 6px 0 0}
+.chip{background:var(--pnl2);color:var(--dim);border:1px solid var(--ln);border-radius:16px;padding:6px 12px;
+font-size:12.5px;cursor:pointer;font-family:inherit;margin:3px 4px 3px 0}
+.chip.on{background:#13304a;border-color:var(--acc);color:var(--acc)}
+.top{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
+.top h2{font-size:16px;margin:0;flex:1;line-height:1.35}
+.back{background:none;border:1px solid var(--ln);color:var(--dim);border-radius:10px;padding:6px 11px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap}
+.tabs{display:flex;gap:6px;margin:6px 0 12px;flex-wrap:wrap}
+.tab{flex:1;min-width:90px;text-align:center;background:var(--pnl);border:1px solid var(--ln);border-radius:10px;padding:8px 6px;font-size:13.5px;cursor:pointer;color:var(--dim);font-family:inherit}
+.tab.on{border-color:var(--acc);color:var(--acc);background:#13304a}
+.tab.tmr{flex:0 0 auto;min-width:0;color:var(--gold)}
+.script{background:#121c28;border:1px solid #2c6183;border-radius:12px;padding:10px 13px;font-size:14px;margin-bottom:12px}
+.script .lab{color:var(--acc);font-size:12px;font-weight:700;display:block;margin-bottom:2px}
+.sec{margin:14px 0 4px;font-size:14px;color:var(--gold);font-weight:700}
+ol.it{margin:0;padding-left:0;list-style:none;counter-reset:n}
+ol.it li{counter-increment:n;position:relative;padding:6px 8px 6px 34px;border-bottom:1px solid var(--ln);font-size:14px}
+ol.it li:before{content:counter(n);position:absolute;left:4px;top:7px;width:22px;height:22px;border-radius:7px;background:var(--pnl2);
+color:var(--dim);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+ol.it li.miss{background:rgba(255,123,114,.07)} ol.it li.miss:before{background:#4a1f1c;color:var(--bad)}
+ol.it li.hit:before{background:#16321f;color:var(--good)}
+.cue{color:var(--acc);font-weight:700}
+.traps{background:#241b0e;border:1px solid #6b4b16;border-radius:12px;padding:10px 13px;margin:14px 0;font-size:13.5px}
+.traps .lab{color:var(--warn);font-weight:700;font-size:12.5px;display:block;margin-bottom:2px}
+.traps ul{margin:0;padding-left:18px}
+.qa{margin:6px 0}
+.qa div{padding:8px 2px;border-bottom:1px solid var(--ln);font-size:14px}
+.qa b.q{display:block;color:#c9d6ea}
+.qa span{color:var(--tx)}
+.dots{display:flex;gap:3px;flex-wrap:wrap;margin:2px 0 10px}
+.dots i{width:12px;height:6px;border-radius:3px;background:var(--pnl2)}
+.dots i.g{background:var(--good)} .dots i.r{background:var(--bad)} .dots i.cur{background:var(--acc)}
+.prevs{font-size:12.5px;color:var(--dim);margin:0 0 8px;padding-left:10px;border-left:2px solid var(--ln)}
+.prevs div{margin:2px 0}
+.card{background:var(--pnl);border:1px solid var(--ln);border-radius:14px;padding:16px;margin:8px 0}
+.deck{font-size:12px;color:var(--dim);margin-bottom:4px}
+.qbig{font-size:17px;font-weight:700;margin:2px 0 10px;line-height:1.5}
+.hid{border:1px dashed var(--ln);border-radius:12px;padding:16px;text-align:center;color:var(--dim);font-size:14px;cursor:pointer}
+.ans{background:#16211a;border:1px solid #2e6b3f;border-radius:12px;padding:12px 14px;font-size:15px;margin-top:10px}
+.ans b{color:#c9f5cc}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.grade button{border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--pnl2)}
+.grade .no{border:1px solid rgba(255,123,114,.6);color:#ffb3ad}
+.grade .ok{border:1px solid rgba(126,231,135,.6);color:#b9f5be}
+.keys{color:var(--dim);font-size:12px;text-align:center;margin-top:10px}
+.sum{text-align:center}
+.sum .big{font-size:42px;font-weight:800;margin:4px 0}
+.miss-list{text-align:left;font-size:13.5px;margin-top:8px}
+.miss-list div{padding:6px 0;border-bottom:1px solid var(--ln)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+td{border-bottom:1px solid var(--ln);padding:8px 6px;vertical-align:top}
+td:first-child{color:var(--acc);font-weight:600;width:30%}
+.tick{display:flex;gap:10px;align-items:flex-start;padding:9px 4px;border-bottom:1px solid var(--ln);cursor:pointer;font-size:14px}
+.tick .bx{flex:0 0 22px;height:22px;border-radius:6px;border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;font-size:13px}
+.tick.on .bx{background:#16321f;border-color:#2e6b3f;color:var(--good)}
+.tick.on .tt{color:var(--dim)}
+.tick b{color:var(--warn)}
+input.search{width:100%;background:var(--pnl);color:var(--tx);border:1px solid var(--ln);border-radius:12px;padding:10px 13px;font:inherit;font-size:14px}
+input.search:focus{outline:none;border-color:var(--acc)}
+.small{font-size:12.5px;color:var(--dim)}
+.reset{background:none;border:0;color:var(--dim);text-decoration:underline;cursor:pointer;font-family:inherit;font-size:12.5px;margin-top:8px}
+.clockbig{font-size:26px;font-weight:800;color:var(--gold)}
+.next{display:block;text-align:right;color:var(--acc);font-size:14px;margin-top:14px}
+#tpill{position:fixed;right:14px;bottom:14px;background:#13304a;border:1px solid var(--acc);color:var(--acc);border-radius:22px;
+padding:9px 16px;font-weight:800;font-size:17px;cursor:pointer;display:none;z-index:9;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+#tpill.warn{background:#3b2a10;border-color:var(--warn);color:var(--warn)}
+#tpill.over{background:#4a1f1c;border-color:var(--bad);color:var(--bad)}
+#tpill small{font-size:11px;font-weight:500;opacity:.8;margin-left:6px}
+@media(max-width:560px){.modes{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="tpill" title="แตะเพื่อหยุด"></div>
+<script>
+var S=[];
+/* ===== หัตถการ / ฐานคงที่ ===== */
+S.push({id:"cpr",cat:"proc",t:"CPR (BLS ผู้ใหญ่)",ch:95,fq:"11/11",
+sc:"ตบไหล่ 2 ข้าง “คุณคะ ๆ ได้ยินไหมคะ” → “ช่วยด้วยค่ะ มีคนหมดสติ! ช่วยโทร 1669 / เรียกทีม CPR และขอ AED ด้วยค่ะ”",
+st:[
+["ประเมิน",[
+"Scene safe::ดูความปลอดภัยของที่เกิดเหตุ (scene safety) ก่อนเข้าไป",
+"เรียก::ตบไหล่ 2 ข้าง เรียก “คุณคะ ๆ” → ไม่ตอบสนอง",
+"ขอความช่วยเหลือ::ตะโกนขอความช่วยเหลือ · โทร 1669 / เรียกทีม CPR + ขอ AED · บอกสถานที่ สถานการณ์ จำนวนผู้ป่วย",
+"ประเมิน::ดูการหายใจ + คลำ carotid pulse พร้อมกัน <b>≤ 10 วินาที</b>"]],
+["กดหน้าอก",[
+"ตัดสินใจ::ไม่หายใจ / no definite pulse → assume cardiac arrest → เริ่ม chest compression ทันที",
+"ตำแหน่ง::กึ่งกลางหน้าอก ครึ่งล่างของ sternum · แขนเหยียดตึง ไหล่ตั้งฉากกับมือ",
+"คุณภาพ::Push hard <b>≥ 5 cm (2 นิ้ว)</b> · push fast <b>100–120/min</b> · full recoil · หยุดกด ≤ 10 วินาที · avoid excessive ventilation"]],
+["ช่วยหายใจ",[
+"อัตราส่วน::<b>30 : 2</b> · เปิด airway ด้วย head tilt–chin lift (สงสัย C-spine → jaw thrust)",
+"Ambu::Ambu bag ต่อ O₂ 10–12 L/min · บีบให้อกยก ครั้งละ ~1 วินาที"]],
+["รอบ + AED",[
+"ทุก 2 นาที::ทุก 5 cycles (~2 นาที) → คลำ pulse / ดู rhythm + เปลี่ยนคนกด",
+"AED::AED มาถึง → เปิดเครื่อง ติด pad ทำตามเสียงสั่ง · ทุกคนถอยตอน shock แล้วกดต่อทันที"]]
+],
+qa:[
+["อัตรากด / ความลึก / การคืนตัว","100–120 ครั้ง/นาที · ≥ 5 cm (2 นิ้ว) · full recoil"],
+["อัตราส่วนกด : ช่วยหายใจ","30 : 2"],
+["คลำ pulse ตรงไหน นานสุดกี่วินาที","Carotid pulse · ไม่เกิน 10 วินาที (ดูการหายใจไปพร้อมกัน)"],
+["เปลี่ยนคนกด / เช็ค pulse เมื่อไร","ทุก 5 cycles ≈ 2 นาที"],
+["คลำได้ pulse ชัดเจน แต่ไม่หายใจ ทำอย่างไร","ไม่กดหน้าอก → ช่วยหายใจอย่างเดียว ~1 ครั้งทุก 6 วินาที (10/min) แล้ว recheck pulse ทุก 2 นาที"],
+["สงสัยบาดเจ็บกระดูกคอ เปิดทางเดินหายใจท่าไหน","Jaw thrust (ไม่ใช้ head tilt–chin lift)"]],
+tr:["48/3: carotid <b>มี pulse จริง</b> → ต้องคลำให้จริงแล้วตัดสินใจตาม (ไม่กดหน้าอก)","46/1: ไม่มีผู้ช่วย AED ไม่มาสักที ต้องปั๊มคนเดียวยาว ๆ → คุมความลึก/อัตราให้คงที่","46/3: ครบ 5 cycles มี ambu ให้ · 50/3: ฉาก “หน้า OR” ต้องสั่งผู้ช่วย “บีบ 2 ที แล้วกด 30 ที”","ปั๊มให้ลึกจริง ๆ ≥ 5 cm"]});
+
+S.push({id:"hand",cat:"proc",t:"ล้างมือ 7 ขั้นตอน + 5 moments",ch:95,fq:"11/11",
+sc:"ถอดนาฬิกา/แหวนก่อน · กดน้ำยา alcohol hand rub (50/3: กด 2 ปั๊ม) ให้ทั่วฝ่ามือ แล้วถูจนมือแห้งพอดี",
+st:[
+["7 ขั้น (alcohol rub รวม ~20–30 วินาที)",[
+"ขั้น 1::ฝ่ามือถูฝ่ามือ",
+"ขั้น 2::ฝ่ามือถูหลังมือ + ซอกนิ้ว (สลับข้าง)",
+"ขั้น 3::ฝ่ามือถูฝ่ามือ นิ้วสอดประสาน ถูซอกนิ้ว",
+"ขั้น 4::หลังนิ้วมือถูฝ่ามืออีกข้าง (นิ้วเกี่ยวกัน)",
+"ขั้น 5::ถูนิ้วหัวแม่มือโดยรอบด้วยฝ่ามืออีกข้าง (สลับข้าง)",
+"ขั้น 6::ปลายนิ้ว/เล็บ ถูวนบนฝ่ามืออีกข้าง (สลับข้าง)",
+"ขั้น 7::ถูรอบข้อมือ (สลับข้าง)"]],
+["5 moments (WHO)",[
+"1::ก่อนสัมผัสผู้ป่วย",
+"2::ก่อนทำหัตถการสะอาด / ปราศจากเชื้อ",
+"3::หลังสัมผัสสารคัดหลั่ง (เสี่ยงสัมผัสเลือด/สารน้ำ)",
+"4::หลังสัมผัสผู้ป่วย",
+"5::หลังสัมผัสสิ่งแวดล้อมรอบตัวผู้ป่วย"]]
+],
+qa:[
+["ใช้เวลาเท่าไร","Alcohol rub รวม ~20–30 วินาที (ไม่ใช่ท่าละ 20 วินาที) · ล้างน้ำ+สบู่ ~40–60 วินาที"],
+["จุดที่พลาดบ่อย (ส่อง UV)","ปลายนิ้ว/ซอกเล็บ · ซอกนิ้ว · นิ้วโป้ง · ข้อมือ · หลังมือ"]],
+tr:["ถอดนาฬิกา/เครื่องประดับก่อนเสมอ (46/1)","46/3 ใช้น้ำยาฟลูออเรสเซนต์ + UV ตรวจว่าล้างทั่วไหม → ถูเล็บ ซอกนิ้ว ข้อมือให้มาก","50/3 ถาม 5 moments ต่อท้าย"]});
+
+S.push({id:"ortho",cat:"proc",t:"Orthostatic hypotension (+ volume status)",ch:95,fq:"11/11",
+sc:"“วันนี้จะมาวัดความดันในท่านอนและท่ายืน เพื่อดูว่าความดันตกเวลาเปลี่ยนท่าไหม ระหว่างวัดขอให้ไม่เกร็ง ไม่พูดคุยนะคะ”",
+st:[
+["เตรียม",[
+"เปิด::ล้างมือ แนะนำตัว ยืนยันชื่อ-สกุล อธิบาย ขออนุญาต",
+"ถาม::ไม่ได้ดื่มชา/กาแฟ/สูบบุหรี่ใน 30 นาที · ห้องเงียบ ไม่เกร็ง ไม่พูดคุย",
+"Cuff::cuff กว้าง ≈ 40% ของรอบแขน · ขอบล่างเหนือข้อพับ 2–3 cm · กึ่งกลาง bladder ทับ brachial artery · แขนระดับหัวใจ",
+"พัก::นอนราบพัก <b>5 นาที</b> (พูดว่า “พักครบ 5 นาทีแล้ว” แล้วทำต่อได้)"]],
+["วัด",[
+"ท่านอน::คลำ radial → ปั๊มจน pulse หาย แล้วเกินอีก 20–30 mmHg → ปล่อย ~2 mmHg/วินาที → อ่าน SBP/DBP + <b>จับ pulse</b>",
+"เปลี่ยนท่า::ให้ลุกยืน (ยืนไม่ไหว → นั่งห้อยขา) ระวังล้ม",
+"ท่ายืน::วัด BP + pulse ที่ <b>1 นาที และ 3 นาที</b> หลังยืน",
+"อาการ::ถามหน้ามืด เวียนหัว ใจสั่น ขณะยืน"]],
+["แปลผล",[
+"เกณฑ์::เทียบกับท่านอน: <b>SBP ↓ ≥ 20</b> หรือ <b>DBP ↓ ≥ 10 mmHg</b> (โพย “20-10-15”: pulse ↑ ≥ 15–20/min; บางตำรา ≥ 30) → orthostatic hypotension",
+"สาเหตุ::volume depletion (ท้องเสีย อาเจียน เสียเลือด) · ยา (diuretic, α-blocker) · autonomic dysfunction (DM, Parkinson)"]],
+["Volume status (ถ้าถาม)",[
+"ดู::drowsy, ซีด, sunken eyeball, dry lips/mouth",
+"คลำ/วัด::skin turgor, capillary refill, pulse เบาเร็ว, JVP, BP, RR (tachypnea), pitting edema"]]
+],
+qa:[
+["เกณฑ์ orthostatic hypotension","SBP ลด ≥ 20 หรือ DBP ลด ≥ 10 mmHg (pulse เพิ่ม ≥ 15–20 ตามโพย) เมื่อเทียบท่านอน"],
+["ลำดับเวลา","นอนพัก 5 นาที → วัดท่านอน → ยืน → วัดที่ 1 และ 3 นาที"],
+["ปั๊ม cuff สูงแค่ไหน ปล่อยเร็วเท่าไร","เกินจุดที่คลำ radial หายอีก 20–30 mmHg · ปล่อย ~2 mmHg/วินาที"],
+["ขนาด cuff","bladder กว้าง ≈ 40% ของรอบแขน (ยาว ≈ 80%)"]],
+tr:["ฐานที่ <b>คนทำไม่ทันมากที่สุด</b> → พูดเวลาแล้วทำต่อ ไม่ต้องรอจริง","อย่าลืม <b>จับ pulse</b> ทุกครั้งที่วัด BP","ต้องพูดแปลผล “เมื่อเทียบกับท่านอน …”"]});
+
+S.push({id:"rehab",cat:"proc",t:"Rehab: จัดท่านอน ป้องกันแผลกดทับ/ข้อติด",ch:92,fq:"10/11",
+sc:"โจทย์มัก 3 ข้อ: ① จุดกดทับในท่านอนหงาย (ที่พบบ่อยสุด) ② อธิบายการจัดท่าบริเวณเท้า ③ ลงมือจัดท่านอนหงาย stroke weak Rt. ด้วย <b>หมอน 3 + hand roll 1 + ผ้ารองแขน 1 + trochanter roll 1</b>",
+st:[
+["① จุดกดทับ",[
+"นอนหงาย::occiput · scapula · olecranon (ศอก) · <b>sacrum</b> (พบบ่อยสุด) · heel (ส้นเท้า)",
+"นอนตะแคง::ear (pinna) · acromion · greater trochanter / iliac crest · medial & lateral condyle (เข่า) · lateral malleolus",
+"นั่ง::ischial tuberosity"]],
+["② เท้า",[
+"กันแผลส้นเท้า::หมอน/ผ้ารองใต้น่อง–ข้อเท้า ให้ส้นเท้าลอยพ้นเตียง",
+"กันเท้าตก::หมอน/ผ้าดันฝ่าเท้า ให้ข้อเท้าตั้งฉาก ~90° (กัน foot drop)"]],
+["③ จัดท่านอนหงาย (8 ขั้น)",[
+"ศีรษะ::(ล้างมือ บอกผู้ป่วย ขออนุญาต) หมอนรองใต้ศีรษะ/ไหล่",
+"แขน::แขนเหยียดไปข้างลำตัว ศอกไม่งอ ข้อมือไม่งอ",
+"ใต้แขน::หมอน/ผ้ารองใต้แขน ให้แขนยกสูงเล็กน้อย",
+"มือ::ผ้าม้วน <b>hand roll</b> ใส่ในมือ กันกำมือแน่น/แผลกดทับ",
+"สะโพก-เข่า::สะโพกเหยียดตรง เข่าเหยียดไม่งอ",
+"ต้นขา::<b>trochanter roll</b> วางข้างต้นขา/สะโพก กันขาบิดออกนอก (external rotation)",
+"น่อง::หมอน/ผ้าม้วนรองใต้น่อง–ข้อเท้า ให้ส้นเท้าลอย",
+"ฝ่าเท้า::หมอนดันฝ่าเท้า กัน foot drop → บอก “<b>เปลี่ยนท่าทุก 2 ชั่วโมง</b>”"]],
+["ท่าตะแคง (ถ้าถาม)",[
+"ตะแคง::หมอนหนุนศีรษะ · หมอนหนุนหลัง · หมอนรองแขนบน · ขาล่างเหยียด ขาบนงอเข่า/สะโพกเล็กน้อยพาดหมอน"]]
+],
+qa:[
+["จุดกดทับที่พบบ่อยที่สุดในท่านอนหงาย","Sacrum"],
+["เปลี่ยนท่าทุกกี่ชั่วโมง","ทุก 2 ชั่วโมง"],
+["ข้อติดที่พบใน stroke","ไหล่หุบ/หมุนเข้า · ข้อมือและนิ้วงอ · เข่างอ · เท้าตก"],
+["ผู้ป่วยอ่อนแรง 2 ขา (50/1–3, 47/1) จัดครึ่งล่างอย่างไร","trochanter roll ทั้ง 2 ข้าง · หมอนใต้น่อง/ข้อเท้าทั้ง 2 ข้าง · ปลายเท้าตั้งฉาก"]],
+tr:["ตอบให้ครบ 3 ส่วน: จุดกดทับ · การจัดเท้า · ลงมือจัดท่า","ปิดท้ายบอก “เปลี่ยนท่าทุก 2 ชม.” ทุกครั้ง"]});
+
+S.push({id:"dtx",cat:"proc",t:"DTX เจาะน้ำตาลปลายนิ้ว",ch:80,fq:"4/4 (รุ่น 50–51)",
+sc:"“วันนี้จะมาเจาะเลือดปลายนิ้วตรวจระดับน้ำตาลนะคะ — ทานอาหารครั้งล่าสุดกี่โมงคะ”",
+st:[
+["เตรียม",[
+"เปิด::ล้างมือ แนะนำตัว ยืนยันชื่อ-สกุล อธิบาย ขออนุญาต · ถามมื้อล่าสุด (fasting หรือ random)",
+"อุปกรณ์::เครื่อง + strip + lancet/ปากกาเจาะ · alcohol pad · สำลีแห้ง · ถุงมือ · พลาสเตอร์ · sharp box",
+"เช็ค::<b>วันหมดอายุ strip</b> (+ code ตรงกับเครื่อง)"]],
+["เจาะ",[
+"เตรียมนิ้ว::ใส่ถุงมือ · เลือกนิ้วกลาง/นาง ด้านข้างปลายนิ้ว · เช็ด alcohol <b>รอให้แห้ง</b>",
+"เจาะ::เจาะด้านข้างปลายนิ้ว · เช็ดหยดแรกทิ้ง ใช้ <b>หยดที่ 2</b> แตะ strip (ไม่บีบนิ้วแรง)",
+"ห้ามเลือด::กดด้วยสำลีแห้ง + ปิดพลาสเตอร์"]],
+["หลังเจาะ",[
+"แปลผล::อ่านค่า พูดค่า + แปลผลให้ผู้ป่วยฟัง",
+"ทิ้ง::lancet → sharp box · strip/สำลี → ขยะติดเชื้อ · ถอดถุงมือ ล้างมือ"]]
+],
+qa:[
+["FBS แปลผล","< 100 ปกติ · 100–125 pre-diabetes (IFG) · ≥ 126 เข้าได้กับ DM (ต้องยืนยันซ้ำ)"],
+["Random glucose","< 180 ปกติ (ตามโพย) · ≥ 200 + อาการ = DM"],
+["ใช้เลือดหยดไหน","หยดที่ 2 (เช็ดหยดแรกทิ้ง)"],
+["ข้อที่เพื่อนทุกกองเตือน","เช็ควันหมดอายุ strip + ถามกินล่าสุดเมื่อไร"]],
+tr:["เช็ค expiry strip ทุกครั้ง (ทุกกองเตือน)","ถามมื้อล่าสุดก่อนเจาะ เพื่อแปลผล fasting/random","เครื่องฟ้อง HI/LO/Error → ดูคู่มือเครื่อง"]});
+
+S.push({id:"iv",cat:"proc",t:"IV fluid · เจาะเลือด · ฉีดยา",ch:15,fq:"IV 4/11 (46–48)",
+sc:"“วันนี้จะมาให้สารน้ำ/ยาทางหลอดเลือดดำ” หรือ “วันนี้จะมาเจาะเลือดจากเส้นเลือดดำเพื่อใช้ในการตรวจวินิจฉัย” → ขออนุญาต",
+st:[
+["IV fluid",[
+"เตรียมชุด::เปิดขวด เช็ด alcohol ปากขวด · ปิด clamp แทงสายเข้าขวด · บีบ drip chamber ให้น้ำ ½ chamber · เปิด clamp ไล่ air จนเต็มสาย แล้วปิด",
+"เตรียมแขน::ล้างมือ ใส่ถุงมือ · รัด tourniquet เหนือจุดแทง 2–3 นิ้ว ให้กำมือ · หาเส้น · เช็ด alcohol รอแห้ง",
+"แทง::Medicut 22G มุม ~15° (10–30°) เห็น flashback → ลดมุม ดันเข็มเข้าเล็กน้อย → ดัน catheter เข้าจนสุด",
+"ต่อสาย::ปลด tourniquet → กดเหนือปลาย catheter → ดึงเข็มออก (sharp box) → ต่อสายน้ำเกลือ → เปิด flow",
+"ตรวจ::ไหลดี ไม่บวม ไม่เจ็บ · ติดเทป (butterfly) · ปรับอัตราหยด"]],
+["Venipuncture",[
+"เตรียม::จัดแขนวางสบาย · รัด tourniquet เหนือข้อพับ · ให้กำ-แบมือ · หา median cubital vein · เช็ด alcohol รอแห้ง",
+"แทง::ดึงผิวใต้จุดแทงให้ตึง · เข็ม 22G หงายปลายเข็ม มุม ~15–30° · เลือดเข้า ค่อย ๆ ดึง syringe",
+"ถอน::ปลด tourniquet → วางสำลี ดึงเข็มออก กด ~5 นาที (ไม่งอแขน)",
+"ใส่หลอด::ใส่เลือดลงหลอด แล้วพลิกหลอดเบา ๆ ~8–10 ครั้ง ไม่เขย่า"]],
+["สีหลอด",[
+"ม่วง::EDTA → CBC",
+"เขียว::Heparin → blood chemistry",
+"แดง::clot / serum → immunology, serology",
+"ฟ้า / เทา::citrate → coagulation (PT, PTT) · fluoride → glucose"]],
+["มุมฉีดยา",[
+"IM::90°","SC::45–60° (insulin pen เข็มสั้น 90°)","ID::< 15° เห็นตุ่ม bleb","IV::10–30° ขนานหลอดเลือด"]]
+],
+qa:[
+["ภาวะแทรกซ้อนจากการให้ IV fluid","infiltration · phlebitis · infection · volume overload · air embolism"],
+["NPH 14 U SC ดูดยาอย่างไร","ใช้ insulin syringe ดูด 14 U (ถ้า 1 ขีด = 2 U → 7 ขีด) แล้วฉีด SC"],
+["เจาะ CBC ใช้หลอดสีอะไร","ม่วง (EDTA)"]],
+tr:["46/1 ผู้ป่วยกลัวเข็ม → ต้องปลอบ อธิบายก่อน","รุ่น 50–51 ไม่มี IV fluid (DTX มาแทน)"]});
+
+S.push({id:"cpt",cat:"proc",t:"Chest PT / postural drainage",ch:12,fq:"1/11 (46/2)",
+sc:"โจทย์เดิม: ผู้ป่วยมี crepitation RLL → ถามก่อนว่า “นอนท่าไหนแล้วไอมากที่สุด” → จัดให้ปอดส่วนที่จะระบายอยู่ <b>ด้านบน</b>",
+st:[
+["เตรียม",[
+"เวลา::ก่อนอาหาร หรือหลังอาหาร 1.5–2 ชม. · ท่าละ 3–15 นาที",
+"อุปกรณ์::เตรียมกระโถน/ทิชชู · เคาะผ่านผ้าด้วยมือรูปถ้วย (cupped hand) แล้วให้ไอ/ดูดเสมหะ"]],
+["ท่า RLL",[
+"Posterior basal RLL::นอนคว่ำ ศีรษะต่ำ 45°",
+"Anterior basal RLL::นอนหงาย ศีรษะต่ำ 45°",
+"Lateral basal RLL::ตะแคง<b>ทับซ้าย</b> ศีรษะต่ำ 45°",
+"Medial basal RLL::ตะแคง<b>ทับขวา</b> ศีรษะต่ำ 45°",
+"Superior (apical) RLL::นอนคว่ำราบ"]],
+["ท่าปอดบน/กลาง",[
+"Apical UL::นั่งเอนหลัง",
+"Anterior RUL / LUL::นอนหงายราบ / นอนหงายศีรษะสูง",
+"Posterior RUL / LUL::ตะแคงครึ่งคว่ำทับซ้าย / ทับขวาศีรษะสูง",
+"RML / lingula::ตะแคงครึ่งหงาย ศีรษะต่ำ ~30°"]]
+],
+qa:[
+["ข้อบ่งชี้ chest PT","ระบายเสมหะไม่ได้ · ไอไม่มีประสิทธิภาพ · atelectasis · V/Q mismatch"],
+["ข้อห้าม","active hemoptysis · ไม่คงที่ (HT, HF, acute MI) · IICP · unstable neck/spine · rib fracture/flail chest · หลังผ่าตัดสมอง/หลอดอาหาร/หัวใจ · pulmonary edema · effusion/empyema มาก · lung bleb"],
+["ข้อเสีย","เจ็บ · เสมหะไหลไปกลีบอื่น · aspiration"]],
+tr:["ถามผู้ป่วยว่าท่าไหนไอมากสุด แล้วจัดตามนั้น","อย่าลืมเตรียมภาชนะใส่เสมหะ + ทิชชู"]});
+
+/* ===== ซักประวัติ ===== */
+S.push({id:"hx0",cat:"hx",t:"โครงซักประวัติ + LODCRAFT + โครงคะแนน",ch:95,fq:"ทุกฐานซัก",
+sc:"“สวัสดีค่ะ ดิฉันเป็นนักศึกษาแพทย์ปี 4 ชื่อ … ขอทราบชื่อ-นามสกุลคุณ … ค่ะ วันนี้ขออนุญาตซักประวัตินะคะ — วันนี้มาด้วยอาการอะไรคะ เป็นมานานเท่าไหร่คะ”",
+st:[
+["เปิด",[
+"แนะนำตัว::ทักทาย แนะนำตัว (นศพ.ปี 4) · ชื่อ-สกุล อายุ อาชีพ ภูมิลำเนา (+ สถานภาพ ศาสนา ในจิตเวช)",
+"ปลายเปิด::บอกวัตถุประสงค์ ขออนุญาต · “มาด้วยอาการอะไร เป็นมานานเท่าไหร่”"]],
+["LODCRAFT",[
+"L::Location ตำแหน่ง",
+"O::Onset ทันที/ค่อยเป็น · ครั้งแรกไหม · ขณะทำอะไร",
+"D::Duration ครั้งละนานเท่าไร · ความถี่",
+"C::Character ลักษณะ + severity (pain score)",
+"R::Radiation ร้าวไปไหน",
+"A::Associated symptoms ตามระบบ + red flags",
+"F::Factors อะไรทำให้ดีขึ้น / แย่ลง",
+"T::Treatment รักษาอะไรมาแล้ว / กินยาอะไร"]],
+["ท้ายเรื่อง (มักลืม)",[
+"PH::U/D · เคยเป็นแบบนี้ไหม · current med + สมุนไพร · แพ้ยา/อาหาร",
+"FH / SH::FH มะเร็ง โรคพันธุกรรม · อาชีพ สุรา บุหรี่ (ปริมาณ นาน) สารเสพติด",
+"หญิง::LMP · ตั้งครรภ์ · คุมกำเนิด (ถ้าเกี่ยวข้อง)",
+"ปิด::“มีอะไรอยากเล่าเพิ่มไหมคะ” → สรุปสั้น ๆ ให้ผู้ป่วยฟัง → ขอบคุณ"]],
+["มารยาท (10–20 คะแนน)",[
+"สื่อสาร::ไม่ใช้ศัพท์แพทย์ · ไม่ถามซ้อนหลายคำถาม · ลำดับไม่วกวน บอกเมื่อเปลี่ยนเรื่อง · ทวนเป็นระยะ · สบตา พยักหน้า"]]
+],
+qa:[
+["โครงคะแนนฐานซักประวัติ","มารยาท 10–20 + เนื้อหาประวัติ 50–78 + DDx 0–15 + วินิจฉัย 10–20 · เกณฑ์ผ่าน 50–65%"],
+["ถามไม่ครบได้คะแนนเท่าไร","มักได้ครึ่ง (5 / 2.5 / 0)"],
+["ตอบวินิจฉัยอย่างไรให้ได้คะแนน","ศัพท์เฉพาะเต็ม 1 โรค (เช่น “GERD” ไม่ใช่ “เจ็บอกจากกระเพาะ”)"],
+["ผู้ป่วยมาตรฐานจะให้ข้อมูลเองไหม","ไม่ — ถ้าไม่ถามตรงข้อสำคัญ จะไม่บอก ต้องถามเฉพาะเจาะจง"]],
+tr:["อย่ารีบ jump to diagnosis","ถามเจาะจง เช่น “ปัสสาวะเป็นฟองไหม” ไม่ใช่ “ปัสสาวะปกติไหม”","ทุกฐาน: ถามแพ้ยา ยาประจำ ครอบครัว"]});
+
+S.push({id:"report",cat:"hx",t:"รายงานเคส + วินิจฉัย (ต่อจากฐานซัก)",ch:70,fq:"6/11 (กอง 2–3)",
+sc:"“ผู้ป่วยหญิง/ชายไทย อายุ __ ปี อาชีพ __ มาด้วย __ เป็นมา __ ก่อนมาโรงพยาบาล …” (พูด 1–2 นาที)",
+st:[
+["ลำดับการพูด",[
+"1 ID + CC::เพศ อายุ อาชีพ · มาด้วย (อาการหลัก) นาน … ก่อนมา รพ.",
+"2 PI::เล่าตามเวลา · ลักษณะอาการหลัก (LODCRAFT) → อาการร่วมที่ <b>มี</b> → pertinent negative ตามระบบ",
+"3 Hx อื่น::U/D ยา แพ้ยา ครอบครัว บุหรี่ สุรา",
+"4 Impression::วินิจฉัย 1 โรค (technical term) + เหตุผลสนับสนุน 2–3 ข้อ",
+"5 DDx::อีก 1–2 โรค + ทำไมคิดน้อยกว่า",
+"6 Plan::ส่งตรวจอะไรเพื่อยืนยัน (ถ้าถูกถาม)"]]
+],
+qa:[
+["ตัวอย่างรายงาน RUQ pain + ไข้ + เหลือง","Charcot's triad → <b>acute cholangitis</b> · DDx acute cholecystitis (ไม่เหลือง), acute hepatitis · Ix CBC, LFT, H/C, U/S upper abdomen"],
+["ตัวอย่างรายงาน chest pain แสบร้อนหลังอาหาร เรอเปรี้ยว","<b>GERD</b> · DDx ACS (ไม่สัมพันธ์ออกแรง ไม่มีเหงื่อแตก), peptic ulcer · Ix (ถ้าถาม) EKG rule out ACS, therapeutic PPI trial / EGD ถ้ามี alarm"]],
+tr:["จดสั้น ๆ ระหว่างซัก (48/3 มีกระดาษทด)","อย่าให้เวลาซักหมดจนไม่ได้สรุป","ตอบวินิจฉัยเดียวที่เจาะจง ไม่ตอบเป็นกลุ่มอาการ"]});
+
+S.push({id:"cp",cat:"hx",t:"Chest pain / GERD",ch:58,fq:"3/11 (46/2, 50/2)",
+sc:"โครงเปิด (hx0) → “เจ็บหน้าอก/แสบร้อนกลางอก” → ซัก LODCRAFT ก่อน แล้วค่อยถาม GERD เฉพาะ",
+st:[
+["LODCRAFT เจ็บอก",[
+"L::ตำแหน่ง ผิวหรือลึก ชี้จุดได้ไหม",
+"O::เริ่มทันที/ค่อยเป็น · ขณะทำอะไร (ออกแรง / หลังอาหาร / นอน)",
+"D::ครั้งละนานเท่าไร · บ่อยแค่ไหน",
+"C::แปลบ / แสบ / บีบ / แน่นเหมือนของหนักทับ · pain score",
+"R::ร้าวไปแขน คาง หลัง (ฉีกไปหลัง = dissection)",
+"F::↑ ออกแรง หายใจเข้า ท่าทาง ก้ม/นอนราบ หลังอาหาร · ↓ พัก ยาอมใต้ลิ้น ยาลดกรด",
+"T::เคยรักษา / ยาที่กิน"]],
+["อาการร่วม (คัดโรคอันตรายก่อน)",[
+"Cardiac::เหงื่อแตก ใจสั่น ตัวเย็น หน้ามืด/เป็นลม · เหนื่อย นอนราบไม่ได้ PND ขาบวม",
+"Lung::ไข้ ไอ เสมหะ ไอเป็นเลือด · หายใจแล้วเจ็บ",
+"PE::ขาข้างเดียวบวม นั่ง/นอนนาน ยาคุม มะเร็ง",
+"ผนังอก / ผิว::ตุ่มน้ำใสตามแนวเส้นประสาท (zoster) · อุบัติเหตุ ยกของหนัก (costochondritis, rib fx)",
+"Psych::เครียด วิตกกังวล หายใจเร็ว มือจีบ (panic)"]],
+["ถามเฉพาะ GERD",[
+"Typical::แสบร้อนกลางอก เรอเปรี้ยว ขมในปาก · จุกแน่นหลังกิน",
+"ท่าทาง::กินอิ่มแล้วนอนทันที · ก้มตัว/นอนราบแล้วแย่ลง",
+"อาหาร::รสจัด ชา กาแฟ น้ำอัดลม ของมัน/ทอด สุรา บุหรี่ (ถาม ≥ 4 อย่าง)",
+"Esophagus::กลืนติด / กลืนเจ็บ / สำลัก · ไอเรื้อรัง เสียงแหบ เจ็บคอ (extra-esophageal)",
+"Alarm::น้ำหนักลด อาเจียนเป็นเลือด ถ่ายดำ ซีด · ยา NSAID/aspirin/steroid · FH มะเร็ง"]],
+["PH",[
+"PH::U/D (HT DM DLP CAD TB SLE) · current med + แพ้ยา · บุหรี่ สุรา · อุบัติเหตุ"]]
+],
+qa:[
+["DDx chest pain ตามอวัยวะ","Cardiac: ACS, pericarditis · Aorta: dissection · Lung: pneumonia, pneumothorax, PE, pleuritis · GI: GERD, esophagitis, PU, biliary, pancreatitis · ผนังอก: costochondritis, rib fx, zoster · Psych: panic"],
+["ข้อที่น้ำหนักสูงในเช็คลิสต์ chest pain 100 คะแนน","ลักษณะอาการ 10 · DDx 3 โรค × 5 = 15 · วินิจฉัยเป็นศัพท์เฉพาะ 15"],
+["46/2 โจทย์ “เจ็บหน้าอก” แต่จริง ๆ คือ","ระบบทางเดินอาหาร → GERD (ถาม GERD ให้ครบก่อนปักใจ)"],
+["รุ่นพี่: ประวัติที่ชี้ zoster / costochondritis","ตุ่มน้ำใสตามแนวผิวหนัง → herpes zoster · อุบัติเหตุ/ยกของหนัก กดเจ็บ → costochondritis / rib fx"]],
+tr:["“ซัก LODCRAFT ไปก่อน แล้วค่อยถามเฉพาะ”","rule out ACS ก่อนเสมอ แต่ “ถาม GERD ให้ครบก่อนปักใจ”","ต้องตอบ DDx 3 โรค (ข้อสอบเดิมให้ระบุ 3)"]});
+
+S.push({id:"psy",cat:"hx",t:"จิตเวช: psychosis (substance-induced)",ch:50,fq:"psychosis 4/11",
+sc:"แนะนำตัว + ชื่อ-สกุล อายุ อาชีพ ภูมิลำเนา สถานภาพ ศาสนา → CC + <b>เป็นมานานเท่าไหร่ ★</b>",
+st:[
+["เวลา",[
+"Duration::เริ่มเมื่อไร นานเท่าไร (brief psychotic < 1 เดือน · schizophreniform 1–6 เดือน · schizophrenia ≥ 6 เดือน)"]],
+["อาการ psychosis",[
+"Delusion::persecutory (มีคนจะทำร้าย/วางยา) · reference (คนพูดถึงตน) · thought broadcasting · grandiose",
+"Hallucination::auditory: ได้ยินเสียงอะไร กี่เสียง สั่ง/วิจารณ์ไหม · visual",
+"Disorganized::disorganized speech · grossly disorganized / catatonic behavior",
+"Negative::5A: affective flattening · asociality · alogia · avolition/apathy · anhedonia"]],
+["Loss of function",[
+"Function::การงาน/การเรียน · ดูแลตัวเอง/กิจวัตร · ความสัมพันธ์กับคนรอบข้าง"]],
+["Organic / substance ★",[
+"Substance::สุรา บุหรี่ กระท่อม กัญชา ยาบ้า/ไอซ์ → ใช้มานานเท่าไร ปริมาณ <b>ครั้งสุดท้าย</b> · หยุดแล้วอาการหายไหม หยุดนานเท่าไร · อาการเกิดก่อนหรือหลังใช้",
+"Medical::SLE · hypo/hyperthyroid · seizure/epilepsy · HIV/syphilis · COVID-19 · head injury · ไข้/ติดเชื้อ",
+"ยา::steroid · ofloxacin (quinolone)"]],
+["อื่น ๆ",[
+"Mood::ซึมเศร้า / mania (นอนน้อยไม่เพลีย พูดมาก ใช้เงินเยอะ)",
+"Hx::ประวัติจิตเวชเดิม · FH จิตเวช · ความเครียด",
+"Risk::ทำร้ายตัวเอง / ผู้อื่น"]]
+],
+qa:[
+["Substance-induced psychotic disorder (ย่อ)","อาการ psychosis เกิดระหว่าง/ไม่นานหลังใช้หรือถอนสาร (ภายใน ~1 เดือน) · สารนั้นทำให้เกิดได้ · ไม่มีอาการก่อนเริ่มใช้ · ไม่คงอยู่นานเกิน ~1 เดือนหลังหยุด"],
+["Brief psychotic disorder","อาการ ≥ 1 วัน แต่ < 1 เดือน แล้วกลับเป็นปกติ"],
+["Schizophrenia","≥ 2 ใน 5 (ต้องมี delusion / hallucination / disorganized speech ≥ 1) · อาการรวม ≥ 6 เดือน (active ≥ 1 เดือน) · loss of function"],
+["ศัพท์ MSE ที่ควรใช้","persecutory delusion · delusion of reference · thought broadcasting · auditory hallucination · flat/blunted affect · loosening of association · insight / judgment"]],
+tr:["med47: ถามสารเสพติด <b>ตรง ๆ</b> → ผู้ป่วยบอก “โดนแกงยาบ้า” ถ้าไม่ถามจะไม่ได้ข้อมูล","ถาม duration / stop / หยุดนานเท่าไร ให้ครบ","แยก mania · psychosis · โรคทางกาย ทุกครั้ง"]});
+
+S.push({id:"mdd",cat:"hx",t:"จิตเวช: MDD / อยากฆ่าตัวตาย",ch:45,fq:"6/11 (51/1 ใช้แล้ว)",
+sc:"แนะนำตัว + ชื่อ อายุ อาชีพ ภูมิลำเนา สถานภาพ → “ช่วงนี้เป็นอย่างไรบ้าง” → <b>ถามย้อนเวลา</b> ว่าเริ่มเบื่อ/เศร้าตั้งแต่เมื่อไร",
+st:[
+["เวลา",[
+"Duration::≥ 2 สัปดาห์ เกือบทุกวัน · ถามย้อน (อยากตาย 1 wk แต่เบื่อมา 3 wk)"]],
+["SIGECAPS (≥ 5/9 + ต้องมี mood หรือ anhedonia)",[
+"Mood::Depressed mood เศร้า ร้องไห้ เกือบทั้งวัน",
+"S::Sleep นอนไม่หลับ / หลับมาก",
+"I::Interest ↓ (anhedonia) ไม่อยากทำสิ่งที่เคยชอบ",
+"G::Guilt / รู้สึกไร้ค่า",
+"E::Energy ↓ เหนื่อยง่าย",
+"C::Concentration ↓ ตัดสินใจไม่ได้",
+"A::Appetite / น้ำหนัก เพิ่ม-ลด",
+"P::Psychomotor ช้าลง / กระสับกระส่าย",
+"S::Suicide ความคิดอยากตาย"]],
+["Suicide ให้ครบ",[
+"Suicide::คิดบ่อยแค่ไหน · <b>วางแผน</b> (วิธี เวลา) · มี<b>อุปกรณ์</b>ไหม · ลงมือ/เคยพยายามไหม · ปัจจัยปกป้อง (ครอบครัว ศาสนา)"]],
+["ผลกระทบ + แยกโรค",[
+"Function::ลางาน หยุดกิจวัตร ความสัมพันธ์",
+"Stressor::เหตุการณ์กระตุ้น (แยก adjustment disorder / grief)",
+"Mania::นอนน้อยไม่เพลีย พลังเยอะ พูดมาก ใช้เงินฟุ่มเฟือย (แยก bipolar)",
+"Psychosis::หูแว่ว เห็นภาพ หวาดระแวง",
+"Organic::สุรา ยาเสพติด · hypothyroid · ยา steroid",
+"Hx::ประวัติจิตเวชเดิม · FH ซึมเศร้า/ฆ่าตัวตาย"]]
+],
+qa:[
+["MDD criteria (DSM-5)","≥ 5/9 อาการ นาน ≥ 2 สัปดาห์ เกือบทุกวัน · ต้องมี depressed mood หรือ anhedonia ≥ 1 · กระทบการทำงาน · ไม่ได้เกิดจากสาร/โรคทางกาย · ไม่เคยมี mania"],
+["Persistent depressive disorder","อารมณ์เศร้าเกือบทุกวัน ≥ 2 ปี"],
+["น้ำหนักคะแนนในเช็คลิสต์ (ประมาณการ)","suicide 10 · ระยะเวลา 5 · DDx 10 · วินิจฉัย MDD + ความรุนแรง 20"]],
+tr:["med50: “MDD ให้ทำ MSE ทุกข้อ”","med51: “ซักตาม DSM-5” · ถามย้อนเวลาให้ได้ ≥ 2 wk","ถามแผน/อุปกรณ์ไม่ครบ มักได้ครึ่งเดียว"]});
+
+S.push({id:"ha",cat:"hx",t:"Headache / Migraine",ch:40,fq:"2/11 (47/1, 50/2)",
+sc:"แนะนำตัว + ชื่อ อายุ อาชีพ ภูมิลำเนา + CC → LODCRAFT → SNOOP → PH (รุ่นพี่: Dx migraine with aura)",
+st:[
+["LODCRAFT",[
+"L::หน้าผาก / ท้ายทอย / ขมับ / รอบตา · ข้างเดียวหรือ 2 ข้าง (6 คะแนน)",
+"O::ทันที (thunderclap) หรือค่อย ๆ · ครั้งแรกหรือเคยเป็น · ช่วงไหนของวัน (ตื่นเช้าปวด = IICP)",
+"D::ครั้งละนานเท่าไร · บ่อยแค่ไหน · เท่าเดิมหรือ progressive (5)",
+"C::ตุบ ๆ / บีบรัด / แปลบ · ความรุนแรง (6)",
+"R::ร้าวไปไหน",
+"A::aura (แสงซิกแซก ภาพเบลอ ชา) · prodrome (หิวมาก กินเยอะ หาวบ่อย ง่วง) · N/V · แพ้แสง/เสียง · น้ำตา/น้ำมูก (cluster)",
+"F::↑ แสงจ้า เสียงดัง เครียด อดนอน ประจำเดือน ออกแรง · ↓ นอนพัก ยา",
+"T::เคยรักษา / ยาแก้ปวดที่กิน (กินบ่อยไหม — medication overuse)"]],
+["SNOOP red flags",[
+"S::Systemic: ไข้ น้ำหนักลด HIV มะเร็ง",
+"N::Neurologic: สับสน ชัก แขนขาอ่อนแรง ตามัว/ภาพซ้อน บุคลิกเปลี่ยน",
+"O::Onset: ฉับพลัน “ปวดที่สุดในชีวิต” (SAH)",
+"O::Older: เริ่มปวดครั้งแรกอายุ > 50",
+"P::Pattern change / progressive / Previous Hx · ปวดตามท่า/ไอ-เบ่ง"]],
+["อื่น ๆ (มักลืม)",[
+"เครียด::ความเครียด / ไม่สบายใจ (6 คะแนน — หลายคนลืม)",
+"อุบัติเหตุ::ศีรษะกระแทก (5)",
+"PH::U/D · current med & แพ้ยา · บุหรี่ สุรา สารเสพติด · ยาคุม · เดินทาง"]]
+],
+qa:[
+["Migraine without aura (5-4-3-2-1)","≥ 5 attacks · 4–72 ชม. · 2 ใน 4 (ข้างเดียว / ตุบ ๆ / ปานกลาง–รุนแรง / แย่ลงเมื่อขยับ) · 1 ใน 2 (N/V หรือ photo+phonophobia) · ไม่เข้ากับโรคอื่น"],
+["Migraine with aura","≥ 2 attacks · aura กลับคืนได้ทั้งหมด (ภาพ/รับสัมผัส/พูด) แต่ละอาการ 5–60 นาที"],
+["Tension-type headache","2 ข้าง บีบรัด ไม่รุนแรงมาก 30 นาที–7 วัน ไม่มี N/V ไม่แย่ลงเมื่อขยับ"],
+["Cluster headache","ข้างเดียวรอบตา รุนแรงมาก 15–180 นาที เป็นชุด ปวดจนตื่น + น้ำตา น้ำมูก หนังตาตก · รักษา O₂ 100% / sumatriptan"],
+["ยา migraine","NSAIDs, triptan (acute)"],
+["น้ำหนักคะแนนที่หลายคนพลาด","ลักษณะปวด 6 · ตำแหน่ง 6 · ความเครียด 6 · วินิจฉัย 10"]],
+tr:["ไฟล์ตัวอย่างเฉลยเป็น tension/functional ไม่ใช่ migraine — อย่าด่วนสรุป","ห้ามสรุป migraine ในผู้สูงอายุที่เพิ่งเริ่มปวด","ถาม “ครั้งนี้ต่างจากเดิมอย่างไร” (5 คะแนน)"]});
+
+S.push({id:"sz",cat:"hx",t:"Seizure",ch:38,fq:"3/11 (46/3, 47/1, 50/3)",
+sc:"แนะนำตัว ชื่อ อายุ อาชีพ ภูมิลำเนา → CC + เป็นมานานเท่าไหร่ · <b>ถ้ามีญาติในห้อง ต้องหันไปถามญาติด้วย</b>",
+st:[
+["ก่อนชัก",[
+"Setting::ขณะนั้นทำอะไรอยู่ · ช่วงเวลา · เป็นครั้งแรกไหม",
+"Prodrome::(ชั่วโมง–วัน) ไม่สบายตัว กระสับกระส่าย ปวดหัว",
+"Aura::ได้กลิ่น/เห็นภาพ/ได้ยินแปลก ๆ · ชา · จุกลิ้นปี่ คลื่นไส้ · กลัว · พูดไม่ได้"]],
+["ขณะชัก (ถามผู้ป่วย + ญาติ)",[
+"Awareness ★::รู้สึกตัวไหมขณะชัก (focal aware vs impaired awareness)",
+"Onset::เริ่มจากส่วนไหน · เกร็ง/กระตุก · ข้างเดียวหรือ 2 ข้าง · ลามทั่วตัวไหม · ศีรษะ/ตาเหลือกไปทางไหน",
+"Automatism::เคี้ยวปาก กะพริบตา มือหยิบจับ",
+"Duration::นานเท่าไร · กี่ครั้ง · ความถี่",
+"Signs ★::กัดลิ้น · ปัสสาวะ/อุจจาระราด · ตัวเขียว · บาดเจ็บ (ต้องถามเอง)",
+"Stereotype::ชักแบบเดิมทุกครั้งไหม"]],
+["หลังชัก",[
+"Postictal::ซึม สับสน หลับ ปวดหัว นานแค่ไหน · อ่อนแรงชั่วคราว (Todd's paralysis) · จำเหตุการณ์ได้ไหม"]],
+["สาเหตุ / trigger + PH",[
+"Trigger::อดนอน สุรา (ดื่ม/หยุด) แสงกะพริบ เครียด ประจำเดือน ลืมยากันชัก",
+"Cause::ไข้ ปวดหัว คอแข็ง (meningitis) · อ่อนแรง (stroke) · head injury · metabolic (น้ำตาล เกลือแร่) · tumor",
+"PH::เคยชัก/อายุที่เริ่ม · ยากันชัก กินสม่ำเสมอไหม · U/D (DM HT ไต ตับ มะเร็ง) · FH epilepsy · อาชีพ/ขับรถ"]]
+],
+qa:[
+["Dx ตัวอย่างรุ่นพี่","Focal (simple partial) seizure with secondary generalization = focal to bilateral tonic-clonic seizure"],
+["Focal aware vs impaired awareness","aware = รู้สึกตัวตลอด (เดิม simple partial) · impaired = ไม่รู้สึกตัวบางช่วง (เดิม complex partial)"],
+["Todd's paralysis","อ่อนแรงชั่วคราวหลังชัก (มักหายภายใน 48 ชม.) ชี้ว่าเป็น focal onset"],
+["Status epilepticus","ชัก ≥ 5 นาที หรือชักซ้ำโดยไม่ฟื้นระหว่างครั้ง"],
+["น้ำหนักคะแนน (ประมาณการ)","รู้สึกตัวไหม 6 · เริ่มจากส่วนไหน 6 · DDx 10 · วินิจฉัย + เหตุผล 20"]],
+tr:["med46: ถ้าถามกว้าง ๆ ว่า “สามีบอกว่าตอนชักเป็นยังไง” ผู้ป่วยจะตอบกว้าง → ต้องถามเจาะจงเอง (กัดลิ้นไหม ปัสสาวะราดไหม)","ถามเรื่องรู้สึกตัวให้ชัด เพราะแต่ละคนได้เคสต่างกัน","ญาติอยู่ในห้อง → ถาม “เห็นเหตุการณ์เป็นอย่างไร”"]});
+
+S.push({id:"ruq",cat:"hx",t:"RUQ pain / jaundice / fever",ch:38,fq:"3/11 (46/3, 48/3, 50/3)",
+sc:"แนะนำตัว + CC → ซักให้ได้ 3 อาการ (ปวดท้อง · เหลือง · ไข้) จดลงกระดาษไว้รายงานเคส (รุ่นพี่: Dx acute cholangitis)",
+st:[
+["ปวดท้อง (LODCRAFT)",[
+"L / R::RUQ / ลิ้นปี่ · ร้าวไหล่ขวา / หลัง",
+"O / D::ทันที/ค่อยเป็น · นานเท่าไร · ปวดต่อเนื่องหรือเป็นพัก ๆ (colic)",
+"C::บีบ / แน่น · ความรุนแรง · มากขึ้นเรื่อย ๆ ไหม",
+"F::↑ หลังอาหารมัน · ↓ ยา / ท่า (โน้มตัวไปหน้าดีขึ้น = pancreatitis)"]],
+["เหลือง",[
+"Onset::เหลืองทันที/ค่อย ๆ · นานเท่าไร · ตลอดหรือเป็น ๆ หาย ๆ · เหลืองก่อนหรือหลังปวด",
+"Cholestasis::ปัสสาวะสีเข้ม (ชา/น้ำปลา) · อุจจาระซีด · คันตามตัว",
+"Pre-hepatic::ซีด อ่อนเพลีย · เคยได้รับเลือด · FH thal",
+"Hepatic::ไข้ เบื่ออาหาร คลื่นไส้นำมา · สุรา · ยา (paracetamol, ยา TB, valproate, สมุนไพร/เห็ด) · สัก ฉีดยาเข้าเส้น เพศสัมพันธ์ · FH ตับอักเสบ",
+"Post-hepatic::ปวดท้อง · ก้อนในท้อง · น้ำหนักลด · ต่อมน้ำเหลือง · ท้องโต"]],
+["ไข้ + อื่น",[
+"ไข้::ไข้ หนาวสั่น (Charcot) · สับสน / ความดันต่ำ (Reynolds)",
+"GI::คลื่นไส้อาเจียน · เบื่ออาหาร น้ำหนักลด · ถ่ายดำ",
+"Exposure::ลุยน้ำ ปวดน่อง ตาแดง (leptospirosis) · เข้าป่า"]],
+["PH",[
+"U/D::นิ่ว / เคยผ่าตัดถุงน้ำดี / ERCP · ตับแข็ง · thal · ตับอ่อนอักเสบ · ไวรัสตับอักเสบ",
+"อื่น::ยาประจำ (บอก ≥ 2 ชนิด) · สุรา บุหรี่ (ปริมาณ นาน) · FH เหลือง/ตับ"]]
+],
+qa:[
+["Charcot's triad","ไข้ + ตัวเหลือง + ปวด RUQ → acute cholangitis"],
+["Reynolds' pentad","Charcot + shock + altered consciousness"],
+["DDx ปวด RUQ + เหลือง + ไข้","acute cholangitis · acute cholecystitis (ไข้ ปวด Murphy + มักไม่เหลือง) · hepatitis · liver abscess · pancreatitis · hemolysis · CA head of pancreas / cholangiocarcinoma"],
+["Ix ที่ควรพูด","CBC · LFT (DB/IB, ALP, GGT) · hemoculture · U/S upper abdomen (CBD dilate / stone)"],
+["DDx เหลือง (รุ่นพี่)","acute cholangitis · thalassemia (hemolysis) · viral hepatitis · leptospirosis"]],
+tr:["48/3: “ซักให้ได้ 3 อาการ” (เหลือง ไข้ ปวดท้อง) แล้วต่อฐานรายงานเคส","ข้อ FH / สุรา / ยา / สีปัสสาวะ-อุจจาระ ข้อละ 5 เท่าอาการหลัก อย่าข้าม"]});
+
+S.push({id:"fever",cat:"hx",t:"Prolonged fever ≥ 1 เดือน (SLE)",ch:18,fq:"5/11 (เกาะกอง 1)",
+sc:"แนะนำตัว + CC → ไข้ → ROS ทุกระบบ → แยก 3 กลุ่ม Infection / Autoimmune / Malignancy (รุ่นพี่: Dx SLE)",
+st:[
+["ไข้",[
+"Pattern::นานเท่าไร · หนาวสั่น · ไข้ตลอด / เป็น ๆ หาย ๆ · สูงลอย / ตอนเย็น"]],
+["ROS ตามระบบ",[
+"URI / LRI::น้ำมูก ไอ เจ็บคอ · หอบ ไอเสมหะ เจ็บอก",
+"GI / HEENT::ปวดท้อง ท้องเสีย มูกเลือด · ตาเหลือง ตัวเหลือง",
+"UTI / GU::แสบขัด ปัสสาวะขุ่น ปวดเอว · ตกขาว ประจำเดือน",
+"Skin / MSK::ผื่น แผล eschar (rickettsia) · ปวดข้อ ปวดเมื่อย",
+"Hemato / Neuro::จ้ำเลือด จุดเลือดออก (dengue) · ปวดหัว ชัก คอแข็ง ซึม",
+"Exposure::ตาแดง ปวดน่อง ลุยน้ำ (lepto) · เข้าป่า (malaria, scrub typhus)",
+"B symptoms::น้ำหนักลด เหงื่อออกกลางคืน เบื่ออาหาร · ก้อน / ต่อมน้ำเหลือง"]],
+["3 กลุ่มใหญ่",[
+"Infection::HIV (เพศสัมพันธ์ไม่ป้องกัน รับเลือด ใช้เข็มร่วม) · TB (สัมผัสผู้ป่วย ไอเรื้อรัง เหงื่อกลางคืน) · IE (ทำฟัน โรคลิ้นหัวใจ)",
+"Autoimmune::SLE ก่อน (RASH MA SHOP): ผื่นแพ้แดด malar/discoid ผมร่วง แผลในปาก ปวดข้อ ปัสสาวะเป็นฟอง/บวม ซีด เจ็บอกเวลาหายใจ ชัก/จิตเวช",
+"Malignancy::lymphoma / leukemia (ต่อมน้ำเหลือง เลือดออกง่าย) · น้ำหนักลด ก้อน"]],
+["PH",[
+"PH::U/D · ยา + แพ้ยา (drug fever) · สุรา บุหรี่ · FH มะเร็ง/autoimmune · อาชีพ ท่องเที่ยว"]]
+],
+qa:[
+["SLE mnemonic","SOAP BRAIN MD: Serositis · Oral ulcer · Arthritis · Photosensitivity · Blood · Renal · ANA · Immunologic · Neurologic · Malar rash · Discoid rash"],
+["2019 EULAR/ACR SLE","Entry ANA ≥ 1:80 → additive criteria รวม ≥ 10 + ต้องมี clinical ≥ 1 ข้อ · แต่ละ domain นับข้อที่น้ำหนักสูงสุด · ไม่ต้องเกิดพร้อมกัน"],
+["น้ำหนักสูงใน SLE 2019","LN class III/IV 10 · LN class II/V 8 · ACLE 6 · pericarditis 6 · joint 6 · anti-dsDNA/anti-Sm 6 · seizure 5 · effusion 5 · fever 2"],
+["Hematologic domain","leukopenia 3 · thrombocytopenia 4 · autoimmune hemolysis 4"]],
+tr:["กอง 2 ออกน้อย (~15–20%) อ่านผ่าน","ถาม ROS ให้ครบทุกระบบ"]});
+
+S.push({id:"edema",cat:"hx",t:"Edema (nephrotic / HF)",ch:18,fq:"4/11 (เกาะกอง 1)",
+sc:"แนะนำตัว + CC “บวม” → clarify → ไล่ทุกอวัยวะ (รุ่นพี่: Dx nephrotic syndrome · อีกเคส CC บวม 2 ข้าง 1 wk นอนหนุนหมอน 2 ใบ ตื่นหอบกลางคืน → HF)",
+st:[
+["Clarify",[
+"ตำแหน่ง::บวมทั้งตัวหรือเฉพาะที่ · บวมจากตรงไหนก่อน · ข้างเดียว/2 ข้าง",
+"ลักษณะ::กดบุ๋มไหม · บวมมากตอนไหน (เช้า = ไต/หนังตา · เย็น = หัวใจ/ขา)",
+"อื่น::หนังตาบวม · ท้องโต"]],
+["บวมทั่วตัว — ไล่ทุกระบบ",[
+"Heart::เหนื่อย นอนราบไม่ได้ (หนุนหมอนกี่ใบ) ตื่นหอบกลางคืน (PND) เจ็บอก ใจสั่น",
+"Kidney::ปัสสาวะออกน้อย · <b>เป็นฟอง</b> · สีน้ำล้างเนื้อ/เลือด · ซีด คลื่นไส้ · ความดันสูง",
+"Liver::ตัวเหลือง ตาเหลือง ท้องโต สุรา ไวรัสตับอักเสบ",
+"Thyroid::ขี้หนาว ง่วง ท้องผูก ผิวแห้ง ปวดข้อ/กล้ามเนื้อ",
+"Cushing / อาหาร::ใช้ steroid ยาชุด สมุนไพร · กินไม่ครบ 5 หมู่ (kwashiorkor)",
+"ยา / แพ้::ACEI, NSAIDs, steroid, amlodipine, ยาคุม · แพ้ยา/อาหาร/แมลง (anaphylaxis)",
+"Pregnancy::LMP · ปวดหัว ตาพร่ามัว จุกลิ้นปี่ (preeclampsia)"]],
+["บวมเฉพาะที่",[
+"DVT::ขาข้างเดียวบวม ปวด · นอนติดเตียง นั่งเครื่องบินนาน มะเร็ง",
+"Lymphatic::กดไม่บุ๋ม · มะเร็ง/ผ่าตัดต่อมน้ำเหลือง",
+"Infection / trauma::ปวด บวม แดง ร้อน ไข้ · อุบัติเหตุ แมลงกัด"]],
+["PH",[
+"PH::U/D · ยาประจำ · แพ้ยา · สมุนไพร · บุหรี่ สุรา · FH"]]
+],
+qa:[
+["Nephrotic syndrome","proteinuria > 3.5 g/day · albumin < 3 g/dL · edema · hyperlipidemia (± lipiduria)"],
+["Nephritic syndrome","hematuria (RBC cast) · HT · oliguria · edema · proteinuria < 3.5 g/day"],
+["ผู้ป่วยมาตรฐานมักตอบเรื่องปัสสาวะว่า","“ไม่มีฟอง ไม่ใช่สีน้ำล้างเนื้อ ปริมาณปกติ” — ต้องถามทีละข้อจึงได้คะแนน"],
+["น้ำหนักคะแนน (Station 14)","ทุกข้อ 5 เท่ากัน ต้องไล่ครบทุกระบบ · วินิจฉัยพร้อมเหตุผล 15 (หนักสุด)"]],
+tr:["ถามแค่ “ปัสสาวะปกติไหม” จะไม่ได้ข้อมูล","อย่าลืมไทรอยด์ (ขี้หนาว ง่วง) และ malnutrition"]});
+
+S.push({id:"hxo",cat:"hx",t:"ซักประวัติอื่น: fatigue · ซีด · ปัสสาวะเลือด · อ่อนแรง · ซึม · กลืนติด · หอบ",ch:12,fq:"มีเช็คลิสต์ในโพย",
+sc:"ใช้โครง hx0 + LODCRAFT แล้วต่อด้วยหัวข้อเฉพาะด้านล่าง (รุ่นพี่: fatigue + น้ำหนักลด 6 เดือน → Dx hyperthyroid)",
+st:[
+["Fatigue + น้ำหนักลด",[
+"Fatigue::นานเท่าไร ตลอด/เป็นพัก · ทั่วตัวหรือเฉพาะส่วน · เป็นมากตอนไหน",
+"Weight::ลดจริงไหม (กี่ kg ในกี่เดือน) · ตั้งใจไหม · กินได้มากขึ้น/น้อยลง",
+"Hyperthyroid::ขี้ร้อน เหงื่อออก หงุดหงิด คอโต ตาโปน ใจสั่น กินเก่งแต่น้ำหนักลด ท้องเสีย มือสั่น ปัสสาวะบ่อย ประจำเดือนผิดปกติ",
+"อื่น::DM (ดื่ม/ปัสสาวะบ่อย) · TB/CA (ไอ เหงื่อกลางคืน ต่อมน้ำเหลือง) · HF · liver · GI · anemia · psych · pregnancy"]],
+["ซีด (ผ่าน 65)",[
+"อาการซีด::เวียนหัว ใจสั่น มือเท้าเย็น อ่อนเพลีย",
+"สร้างน้อย::เลือดออกง่าย ไข้ น้ำหนักลด ต่อมน้ำเหลือง ก้อนในท้อง แสบลิ้น เล็บเปราะ อาหาร",
+"ทำลายมาก::เหลือง ปัสสาวะเข้ม · ภูมิลำเนา FH",
+"เสียเลือด::ถ่ายดำ พยาธิ ยา (NSAID) · อุบัติเหตุ · เคยรับเลือด/ยาเหล็ก",
+"ประจำเดือน::ปริมาณ จำนวนผ้าอนามัย · ครั้งสุดท้าย · เคยมามากไหม (รวม 20 คะแนน!)"]],
+["ปัสสาวะเป็นเลือด (ผ่าน 60)",[
+"ลักษณะ::แดงสด / น้ำล้างเนื้อ / น้ำปลา · ช่วงไหนของสาย · ก้อนเลือด · (หญิง) สัมพันธ์รอบเดือน",
+"สาเหตุ::ไข้ แสบขัด ปวดเอว · กรวด/นิ่ว · บวม/HT · ไข้-เจ็บคอนำมา · เลือดออกง่าย · ยา (warfarin, cyclophosphamide, NSAID) · มะเร็ง/การรักษา · อุบัติเหตุ · FH มะเร็ง"]],
+["อ่อนแรง",[
+"Pattern::นาน · ฉับพลัน/ค่อยเป็น · ครึ่งซีก/2 ข้างเท่ากัน · ลุกยืนลำบาก (proximal) vs หยิบของหลุด (distal) · แขน vs ขา · ชา",
+"ร่วม::ปวดหัว ชัก · ปวดกล้ามเนื้อ · หนังตาตก พูด/กลืนลำบาก (MG) · ไข้/ท้องเสียนำมา (GBS, hypoK) · ยาขับปัสสาวะ steroid · FH"]],
+["ซึมในผู้สูงอายุ (ถามญาติ · ผ่าน 50)",[
+"ซึม::นาน · ฉับพลัน · อ่อนแรง หน้าเบี้ยว พูดไม่ชัด · ปวดหัว อาเจียนพุ่ง · ชัก · ไข้ · อุบัติเหตุ · ขวดยา/สารพิษข้างตัว · <b>ขอดูยาทั้งหมด ★</b> · ใครจัดยา ขาดยา · สุรา"]],
+["กลืนติด / หอบ",[
+"กลืนติด::ตำแหน่ง · ของแข็ง vs เหลว · progressive · กลืนเจ็บ แสบอก สำลัก · ก้อนที่คอ เสียงแหบ · น้ำหนักลด · สิ่งแปลกปลอม กรด-ด่าง · หนังตาตกตอนเย็น · FH มะเร็ง",
+"หอบ::onset · ขณะทำอะไร ขึ้นบันไดกี่ชั้น · orthopnea PND บวม (heart) · หอบหืด ภูมิแพ้ บุหรี่ (lung) · ปัสสาวะน้อย (kidney) · ซีด · ไทรอยด์ · อาชีพ สัตว์เลี้ยง"]]
+],
+qa:[
+["กลืนติดของแข็งแล้วแย่ลงเรื่อย ๆ","mechanical obstruction (เช่น CA esophagus)"],
+["กลืนติดทั้งของแข็งและของเหลวตั้งแต่แรก","motility disorder (เช่น achalasia)"],
+["ซึมในผู้สูงอายุ ข้อดาว","ขอดูยาทั้งหมดที่ใช้ · DDx ตัวแรก 10 + ตัวที่สอง 5"]],
+tr:["ซีด: ข้อประจำเดือนรวม 20 คะแนน อย่าลืมในผู้หญิง","อ่อนแรง: ลักษณะอ่อนแรง 6 ข้อ ข้อละ 5 (30 คะแนน)"]});
+
+/* ===== Advice / Consent ===== */
+S.push({id:"hiv",cat:"adv",t:"HIV: ซักความเสี่ยง + ขอ consent เจาะ Anti-HIV",ch:45,fq:"4/11 (รวม 50/2)",
+sc:"โจทย์เดิม: “หญิง 30 ปี ผอมลง ฝ้าขาวในปาก 1 เดือน” → ซักพฤติกรรมเสี่ยง + ขอความยินยอม · เปิด: “ตอนนี้อาการเป็นอย่างไรบ้างคะ ยังมีไข้/ปวดหัวอยู่ไหม · คุณหมอแจ้งแล้วหรือยังว่าคิดถึงโรคอะไร”",
+st:[
+["เปิด + อาการ",[
+"เปิด::แนะนำตัว ยืนยันชื่อ · ถามอาการปัจจุบัน · ประเมินความเข้าใจเดิม",
+"อาการ::น้ำหนักลด · ฝ้าขาวในปาก (oral candidiasis) · ท้องเสีย/ไข้/ไอเรื้อรัง · ต่อมน้ำเหลือง · ผื่น"]],
+["ความเสี่ยง (ถามเป็นกลาง ไม่ตัดสิน)",[
+"เพศสัมพันธ์::ไม่ใช้ถุงยาง · หลายคู่ · ชาย-ชาย · คู่นอนมีความเสี่ยง · เคยเป็น STD",
+"เลือด / เข็ม::ฉีดสารเสพติด ใช้เข็มร่วม · สัก/เจาะ · เคยรับเลือด · เข็มตำ/สัมผัสเลือด"]],
+["อธิบาย + ขอ consent",[
+"ทำไมตรวจ::อาการ + ความเสี่ยง → อยากตรวจหาการติดเชื้อ HIV เพื่อวางแผนรักษา",
+"HIV คืออะไร::ไวรัสทำลายเม็ดเลือดขาว CD4 → ภูมิคุ้มกันต่ำ → ติดเชื้อฉวยโอกาส · ติดทางเพศสัมพันธ์ เลือด แม่สู่ลูก",
+"ประโยชน์::รักษาได้ ยาต้านไวรัสคุมได้ ใช้ชีวิตใกล้ปกติ ยิ่งรู้เร็วยิ่งดี",
+"สิทธิ์::ตรวจโดยสมัครใจ ปฏิเสธได้ ไม่กระทบการรักษาอื่น · ผลเป็นความลับ",
+"ผลที่เป็นไปได้::บวก / ลบ / อยู่ใน window period → อาจต้องตรวจซ้ำ",
+"เตรียมใจ::ถามความกังวล · “ถ้าผลเป็นบวก วางแผนอย่างไร มีใครที่ไว้ใจ” · ขอความยินยอมชัดเจน · นัดฟังผล + post-test counselling",
+"ยังไม่พร้อม::ให้เวลาคิด กลับมาคุยใหม่ได้"]]
+],
+qa:[
+["Window period","ชุดตรวจ Ag/Ab (4th gen) ~2–4 สัปดาห์ (อาจถึง 3 เดือน) → ถ้าลบแต่เสี่ยงใหม่ ให้ตรวจซ้ำ"],
+["ถ้าผู้ป่วยปฏิเสธการตรวจ","เคารพสิทธิ์ ไม่กระทบการรักษาอื่น · ให้ข้อมูลเพิ่ม ถามเหตุผลที่กังวล ให้เวลาตัดสินใจ"],
+["ฐานนี้ประกอบด้วย 2 ส่วน","ซักความเสี่ยง + inform consent (คล้าย breaking bad news) ทำต่อเนื่องกัน"]],
+tr:["ถามเรื่องเพศสัมพันธ์อย่างเป็นกลาง ไม่ตัดสิน","ต้องพูดเรื่อง <b>ความลับ</b> และ <b>สิทธิ์ปฏิเสธ</b>","ปิดด้วยนัดฟังผล + เปิดให้ถาม"]});
+
+S.push({id:"g6pd",cat:"adv",t:"Advice G6PD deficiency",ch:35,fq:"2/11 (46/2, 50/3)",
+sc:"“วันนี้จะมาให้คำแนะนำเกี่ยวกับโรคที่เป็นอยู่ ไม่ทราบว่ารู้จักโรคนี้มาก่อนไหมคะ / คุณหมอแจ้งแล้วหรือยัง”",
+st:[
+["อธิบายโรค",[
+"กลไก::ขาดเอนไซม์ G6PD ในเม็ดเลือดแดง (ช่วยกำจัดอนุมูลอิสระ) → เจอสิ่งกระตุ้นแล้วเม็ดเลือดแดงแตกง่าย",
+"พันธุกรรม::X-linked recessive (ชายเป็นมาก หญิงเป็นพาหะ) · รักษาไม่หายขาด แต่ป้องกันการกำเริบได้ · ปกติไม่มีอาการ",
+"อาการกำเริบ::ซีด เหนื่อย ใจสั่น ตัวเหลือง ตาเหลือง ปัสสาวะสีเข้ม (โค้ก/น้ำปลา) ไข้"]],
+["สิ่งที่ต้องเลี่ยง",[
+"ยา::primaquine · dapsone · sulfonamide/cotrimoxazole · nitrofurantoin · methylene blue → ไม่ซื้อยากินเอง",
+"อาหาร / สารเคมี::ถั่วปากอ้า (fava bean) · ลูกเหม็น (naphthalene)",
+"ติดเชื้อ::ไข้/ติดเชื้อกระตุ้นได้ → ดูแลสุขภาพ เลี่ยงสัมผัสผู้ป่วยติดเชื้อ"]],
+["สิ่งที่ต้องทำ",[
+"แจ้ง::บอกแพทย์/เภสัช/พยาบาลทุกครั้งว่าเป็น G6PD · พกบัตร",
+"Red flag::ปัสสาวะสีเข้ม เหลือง ซีด เหนื่อย ใจสั่น หลังกินยา/อาหารเสี่ยง → มา รพ. ทันที",
+"ครอบครัว::ตรวจคัดกรองคนในครอบครัว"]],
+["ภาวะแทรกซ้อน hemolysis รุนแรง",[
+"Complication::AKI · hyperkalemia → arrhythmia / cardiac arrest · DIC · metabolic acidosis · heart failure"]]
+],
+qa:[
+["“อยากมีลูกได้ไหม”","ได้ · ควรพาคู่มาตรวจด้วย (X-linked) · ทางเลือก IVF + PGT-M เลือกตัวอ่อนที่ไม่เป็นโรค"],
+["ถ้าพ่อเป็น G6PD แม่ปกติ ลูกจะเป็นอย่างไร","ลูกสาวทุกคนเป็นพาหะ · ลูกชายปกติทุกคน"],
+["ถ้าแม่เป็นพาหะ พ่อปกติ","ลูกชาย 50% เป็นโรค · ลูกสาว 50% เป็นพาหะ"],
+["ภาวะแทรกซ้อน 3 ข้อ (ถ้าถามในฐาน smear G6PD)","AKI · hyperkalemia · DIC (± heart failure, cardiac arrest, acidosis)"]],
+tr:["คำถามประจำฐาน: “อยากมีลูก”","ปิดท้าย “มีอะไรสงสัยไหมคะ” + สรุป red flag"]});
+
+S.push({id:"mi",cat:"adv",t:"Advice post-MI / PCI",ch:18,fq:"5/11 (กอง 1 ทั้งหมด)",
+sc:"“คุณหมอคนก่อนบอกแล้วหรือยังคะว่าเป็นโรคอะไร · เข้าใจเกี่ยวกับโรคกล้ามเนื้อหัวใจขาดเลือดอย่างไรบ้าง · วันนี้จะมาแนะนำการดูแลตัวเองหลังจากนี้นะคะ”",
+st:[
+["อธิบายโรค",[
+"กลไก::ไขมันสะสมในผนังหลอดเลือด → เลือดเลี้ยงกล้ามเนื้อหัวใจไม่พอ → กล้ามเนื้อหัวใจตายบางส่วน → แทรกซ้อน HF, arrhythmia",
+"เสี่ยง/เป้าหมาย::ปัจจัยเสี่ยง DM HT ไขมัน บุหรี่ · กลับเป็นซ้ำได้ · เป้า: ป้องกันเป็นซ้ำ ป้องกันเสียชีวิตเฉียบพลัน บรรเทาอาการ"]],
+["ปรับพฤติกรรม",[
+"อาหาร::ลดของทอด/มัน/คอเลสเตอรอลสูง (เนื้อติดมัน ไข่แดง อาหารทะเล) · กินผัก ผลไม้ ปลา ไก่ น้ำมันมะกอก · ลดเค็ม",
+"บุหรี่ / สุรา / น้ำหนัก::งดบุหรี่เด็ดขาด · งดสุรา · คุมน้ำหนัก (BMI 26 → < 23)",
+"ออกกำลัง::aerobic ปานกลาง ~150 นาที/สัปดาห์ (ยังพูดเป็นประโยคได้) · cardiac rehab · ช่วงแรกอย่ายกของหนัก",
+"เลี่ยง trigger::ออกแรงหลังมื้อใหญ่ อากาศเย็น ความเครียด"]],
+["เป้าหมายปัจจัยเสี่ยง",[
+"LDL::< 70 mg/dL (statin + อาหาร)",
+"BP::< 140/90 mmHg (ACEI/ARB + ลดเค็ม)",
+"DM::HbA1c < 6.5%"]],
+["ยา (ตอบ “ทำไมยาเยอะ”)",[
+"Antiplatelet::aspirin + clopidogrel: กันลิ่มเลือดอุดซ้ำ/อุดขดลวด · ห้ามหยุดเอง · เลือดออกง่ายขึ้น",
+"Beta-blocker::metoprolol: ลดงานหัวใจ ลด arrhythmia · ระวังชีพจรช้า เวียนหัว เหนื่อย",
+"Statin::ลด LDL ทำให้ plaque เสถียร · ระวังปวดกล้ามเนื้อ ตับ",
+"NTG::ยาอมใต้ลิ้น พกติดตัวเสมอ · <b>อย่าซื้อยากินเอง (เช่น viagra)</b>"]],
+["Red flag + ปิด",[
+"Red flag::แน่นอกเหมือนของหนักทับ ร้าวกราม/แขน เหงื่อแตก → อม NTG 1 เม็ด ถ้า 5 นาทีไม่ดีขึ้น โทร 1669 / มา รพ. ทันที (อมซ้ำได้ทุก 5 นาที สูงสุด 3 เม็ด)",
+"ปิด::กินยาสม่ำเสมอ มาตามนัด · “มีอะไรสงสัยเพิ่มไหมคะ”"]]
+],
+qa:[
+["“พรุ่งนี้ถอนฟัน / ผ่าตัดได้ไหม”","ห้ามหยุดยาต้านเกล็ดเลือดเอง · ไม่เร่งด่วนให้เลื่อนก่อน (หลังใส่ stent ~6 เดือน–1 ปี) · ถ้าจำเป็น แจ้งทันตแพทย์/ศัลยแพทย์ให้ปรึกษาหมอหัวใจ"],
+["“มีเพศสัมพันธ์ได้ไหม”","ไม่ใช่ข้อห้าม ถ้าอาการคงที่ กินยาสม่ำเสมอ (ขึ้นบันได 2 ชั้นไม่เจ็บอก) · ช่วง ~2 สัปดาห์แรกงดก่อน · เลี่ยงหลังมื้อหนัก · <b>ห้ามใช้ sildenafil ร่วม nitrate</b> → BP ตกฮวบ"],
+["“แปรงฟันแล้วเลือดออก”","ผลข้างเคียงยาต้านเกล็ดเลือด ห้ามหยุดเอง · ถ้าถ่ายดำ อาเจียนเป็นเลือด ปัสสาวะเป็นเลือด → มา รพ. ทันที"],
+["“ปวดเมื่อยจากยาลดไขมัน / กินสมุนไพรล้างหลอดเลือดแทนได้ไหม”","ไม่แนะนำให้ใช้แทน · ปวดกล้ามเนื้อให้มาพบแพทย์ปรับยา ไม่หยุดเอง"],
+["“ไม่เจ็บแล้ว ต้องกินยาตลอดชีวิตเลยเหรอ”","ยาต้านเกล็ดเลือดตัวที่ 2 กินครบตามที่หมอสั่ง (~1 ปี) · aspirin + statin กินต่อเนื่อง · อย่าหยุดเอง"]],
+tr:["ข้อท้ายเช็คลิสต์คือคำถามเรื่องเพศสัมพันธ์","อย่าลืม “อย่าซื้อยากินเอง (viagra)” + red flag"]});
+
+S.push({id:"ng",cat:"adv",t:"Consent NG tube (gastric lavage)",ch:18,fq:"5/11 (กอง 1)",
+sc:"“ผู้ป่วยอาเจียนเป็นเลือด วันนี้จะใส่สายยางทางจมูกลงไปที่กระเพาะ เพื่อดูว่ายังมีเลือดออกอยู่ไหม และล้างเลือดออก (gastric lavage) นะคะ”",
+st:[
+["อธิบาย",[
+"ทำไม::อาเจียนเป็นเลือด → ใส่สายเพื่อดู active bleeding + ล้างกระเพาะ",
+"ทำอย่างไร::ใส่สายทางจมูก ผ่านหลอดอาหารลงกระเพาะ ให้ผู้ป่วยช่วยกลืนตามสาย",
+"รู้สึกอย่างไร::แสบ/เจ็บจมูก คอ คลื่นไส้ น้ำตาไหล (ชั่วคราว)",
+"นานแค่ไหน::ตามจุดประสงค์ (จนน้ำล้างใส) · แนะนำไม่เกิน ~1 เดือนต่อสาย"]],
+["ถามข้อห้าม",[
+"จมูก / หน้า::คัดจมูกมาก · เคยผ่าตัด/อุบัติเหตุจมูก ใบหน้า ศีรษะ",
+"หลอดอาหาร::กลืนลำบาก/กลืนติด · หลอดอาหารตีบ/อักเสบ/เคยผ่าตัด",
+"เลือดออก::เลือดออกง่าย · ยาต้านเกล็ดเลือด/ยาต้านการแข็งตัวของเลือด",
+"อื่น (โพย)::HIV ที่คุมไม่ได้ · อาเจียนเรื้อรังไม่ตอบสนองยา"]],
+["ภาวะแทรกซ้อน",[
+"เฉพาะที่::เลือดออก/บาดเจ็บจมูก คอหอย · บาดเจ็บกล่องเสียง",
+"ทางเดินอาหาร::แผล ติดเชื้อ หรือทะลุ หลอดอาหาร/กระเพาะ",
+"ใส่นาน::แผลกดทับที่จมูก · ไซนัสอักเสบ · หูชั้นกลางอักเสบ",
+"ปอด::สำลัก → aspiration pneumonia · สายเข้าหลอดลม"]],
+["ปิด",[
+"Consent::ถามความเข้าใจ/ความกังวล · เปิดให้ถาม · ขอความยินยอม (ลงชื่อ)"]]
+],
+qa:[
+["“ไม่ใส่ได้ไหม”","มีสิทธิ์ปฏิเสธ แต่ต้องบอกผล: ไม่รู้ว่ายังเลือดออกไหม ล้างเลือดไม่ได้ อาจต้องวิธีอื่น (ส่องกล้อง) · ถามว่ากังวลเรื่องอะไร"],
+["“ต้องใส่นานแค่ไหน”","จนเลือดหยุด/น้ำล้างใส แล้วแพทย์ประเมินถอด · ไม่เกิน ~1 เดือนต่อสาย"],
+["“เจ็บไหม ใส่ยากไหม”","แสบชั่วคราว ถ้าช่วยกลืนตามสายจะใส่ง่ายขึ้น"]],
+tr:["บอกภาวะแทรกซ้อนให้ครบ (คะแนนอยู่ตรงนี้)","ถามข้อห้ามก่อนใส่ทุกครั้ง"]});
+
+S.push({id:"ngf",cat:"adv",t:"สอนญาติให้อาหารทางสายยาง (NG feeding)",ch:15,fq:"คู่กับ NG",
+sc:"“วันนี้จะมาแนะนำการให้อาหารทางสายยางทางจมูกลงกระเพาะ เพื่อให้ผู้ป่วยได้รับอาหารเมื่อกินทางปากไม่ได้ · ท่านเป็นผู้ดูแลหลักใช่ไหมคะ เคยช่วยพยาบาลป้อนมาก่อนไหมคะ”",
+st:[
+["ก่อนให้",[
+"เตรียม::ล้างมือ · จัดท่านอนหัวสูง <b>30–45°</b> หรือนั่ง",
+"เช็คสาย::ดูขีดความยาวที่จมูกไม่เลื่อน · ดูดสิ่งค้างในกระเพาะ (residual) ออกมาดู",
+"Residual::<b>< 50 mL</b> → ดันกลับเข้าไป แล้วให้อาหารได้ · มากกว่า → เลื่อนมื้อออก ~1 ชม. แล้วตรวจใหม่"]],
+["ระหว่างให้",[
+"ต่อสาย::พับ/หนีบสายก่อนต่อ syringe กันลมเข้า",
+"ความสูง::ถุง/กระบอกอาหารสูงจากตัวผู้ป่วย <b>~30 cm</b> · ไหลช้า ๆ ตามแรงโน้มถ่วง ไม่ดัน · อาหารอุ่นเล็กน้อย"]],
+["หลังให้",[
+"Flush::flush ด้วยน้ำต้มสุก ~20–30 mL · ปิดจุก พับเก็บ",
+"ท่า::นั่ง/หัวสูงต่อ <b>30–60 นาที</b> ห้ามนอนราบทันที",
+"ดูแล::ทำความสะอาดปาก-จมูกทุกวัน · ติดเทปยึดแน่น เปลี่ยนตำแหน่งเทป",
+"ให้ยา::บดละเอียดทีละตัว ละลายน้ำต้มสุก ป้อนแยก flush ตาม ไม่ผสมในอาหาร"]],
+["Red flag → มา รพ.",[
+"Red flag::สำลัก ไอ หอบ ตัวเขียว · สายหลุด · ท้องอืดมาก อาเจียน · residual เป็นอาหารไม่ย่อย/สีเขียว-น้ำตาลเข้มตลอด"]]
+],
+qa:[
+["“ดูดแล้วอาหารค้างเยอะ เททิ้งเลยได้ไหม”","ห้ามทิ้ง ดันกลับเข้าไป (มีน้ำย่อย เกลือแร่) แล้วรอ ~1 ชม. ค่อยตรวจใหม่"],
+["“กำลังป้อน ไอแรง หน้าแดง หายใจครืดคราด”","หยุดป้อนทันที จับตะแคง ดูดเศษอาหาร/เสมหะ · หายใจไม่ออก โทร 1669"],
+["“สายเลื่อนหลุด ดันกลับเองได้ไหม”","ห้าม อาจเข้าหลอดลม · ติดเทปไว้แล้วพามา รพ."],
+["“บดยารวมกันเทผสมนมได้ไหม”","ไม่แนะนำ ตกตะกอน สายตัน ดูดซึมไม่ดี → บดทีละตัว ป้อนแยก flush ตาม"]],
+tr:["ตัวเลขต้องจำ: หัวสูง 30–45° · residual < 50 mL · สูง 30 cm · นั่งต่อ 30–60 นาที"]});
+
+S.push({id:"advo",cat:"adv",t:"Advice อื่น: epilepsy · TB · HT · ให้เลือด · CKD · LP",ch:8,fq:"โพยรุ่นพี่",
+sc:"โครงเดียวกันทุก advice: แนะนำตัว → ถามความเข้าใจเดิม → อธิบายทีละหัวข้อด้วยภาษาง่าย → teach-back → red flag → เปิดให้ถาม",
+st:[
+["Epilepsy",[
+"ยา::กินสม่ำเสมอ ไม่หยุดเอง · เลี่ยง trigger (อดนอน สุรา แสงกะพริบ)",
+"ปฐมพยาบาล::ตั้งสติ จัดนอนตะแคง กันอุบัติเหตุ <b>ห้ามงัดปาก/ใส่ของในปาก</b> จับเวลา · ชัก > 5 นาที โทร 1669",
+"ข้อห้าม::ว่ายน้ำคนเดียว ที่สูง เครื่องจักร · ขับรถเมื่อคุมชักได้ ≥ 1 ปี (โพย)",
+"ผลข้างเคียงยา::phenytoin: เหงือกบวม ขนดก เดินเซ ง่วง SJS · valproate: มือสั่น น้ำหนักขึ้น ผมร่วง ตับ teratogenic · carbamazepine: SJS (HLA-B*1502), hyponatremia"]],
+["TB",[
+"สูตร::2HRZE/4HR (2+4 เดือน) กินครบ ตรงเวลา",
+"ผลข้างเคียง::ผื่น · ตัวเหลือง (H, R, Z) · ชาปลายมือเท้า (H → ให้ B6) · ตามัว/ตาบอดสี (E) · ปัสสาวะสีส้ม (R ปกติ)",
+"กันแพร่::ปิดปากเวลาไอ ใส่หน้ากาก แยกห้อง ~2 สัปดาห์แรก · ตรวจคัดกรองผู้สัมผัส"]],
+["HT · CKD",[
+"HT::เป้า < 140/90 · ลดเค็ม DASH ออกกำลัง ลดน้ำหนัก งดบุหรี่ สุรา · กินยาสม่ำเสมอ วัดความดันที่บ้าน",
+"CKD::คุม BP/DM · เลี่ยง NSAIDs สมุนไพร · ลดเค็ม · โปรตีนพอดี · K/P ตามระยะ"]],
+["ให้เลือด · LP",[
+"ให้เลือด::ข้อบ่งชี้ ประโยชน์ ความเสี่ยง (ไข้ หนาวสั่น ผื่นแพ้ volume overload hemolytic reaction ติดเชื้อโอกาสต่ำมาก) · มีอาการผิดปกติระหว่างให้ บอกทันที",
+"LP::เหตุผล · วิธีทำ (นอนตะแคงกอดเข่า เจาะ L3–4/L4–5) · แทรกซ้อน: ปวดหัวหลังเจาะ ติดเชื้อ เลือดออก ปวดหลัง"]]
+],
+qa:[
+["ชักนานเท่าไรต้องโทร 1669","> 5 นาที (หรือชักซ้ำไม่ฟื้น)"],
+["ยา TB ตัวไหนทำให้ปัสสาวะส้ม / ชาปลายมือเท้า / ตามัว","Rifampicin / Isoniazid (ให้ B6) / Ethambutol"]],
+tr:["ฐานเหล่านี้ยังไม่พบในชุดที่รวบรวม อ่านผ่านหนึ่งรอบพอ"]});
+
+/* ===== ตรวจร่างกาย ===== */
+S.push({id:"cereb",cat:"pe",t:"Cerebellar signs",ch:55,fq:"5/11 (กอง 2–3)",
+sc:"“วันนี้จะมาตรวจการทำงานของสมองน้อย ซึ่งควบคุมการทรงตัวและการเคลื่อนไหว ขออนุญาตนะคะ” · ระหว่างตรวจ <b>บอกอาจารย์ว่ากำลังตรวจอะไร</b> และรายงานผลทุก test",
+st:[
+["นั่ง",[
+"Speech::ให้พูดประโยค → dysarthria (scanning / slurred speech)",
+"Nystagmus::มองตามนิ้ว ซ้าย-ขวา-บน-ล่าง ค้างปลายทาง",
+"Finger-to-nose::แตะจมูกตัวเอง สลับนิ้วผู้ตรวจ (ขยับนิ้วเปลี่ยนตำแหน่ง) ทีละข้าง → intention tremor, dysmetria",
+"Rebound test::ยกแขนต้านแรง ผู้ตรวจปล่อยทันที → overshooting",
+"Rapid alternating::คว่ำ-หงายมือบนต้นขาเร็ว ๆ → dysdiadochokinesia"]],
+["ยืน / เดิน",[
+"Romberg::ยืนชิดเท้า ลืมตา → หลับตา (ยืนใกล้กันล้ม) · positive = sensory ataxia",
+"Gait::เดินปกติ + tandem gait (ต่อส้นเท้า-ปลายเท้า) → wide-based gait, truncal ataxia"]],
+["นอน",[
+"Heel-to-shin::วางส้นเท้าบนเข่าอีกข้าง แล้วลากลงตามหน้าแข้งถึงเท้า ทั้ง 2 ข้าง → ส้นเท้าส่ายออกนอกแนว"]],
+["สรุป",[
+"Report::“No dysarthria, no nystagmus, finger-to-nose and heel-to-shin intact, no dysdiadochokinesia, tandem gait normal, Romberg negative → no cerebellar sign”"]]
+],
+qa:[
+["DANISH","Dysdiadochokinesia · Ataxia · Nystagmus · Intention tremor · Slurred/scanning speech · Hypotonia / Heel-shin"],
+["Romberg positive บอกอะไร","sensory (proprioceptive) ataxia · cerebellar ataxia จะเซตั้งแต่ลืมตา"],
+["Cerebellar hemisphere lesion ให้อาการข้างไหน","ข้างเดียวกัน (ipsilateral)"],
+["Midline (vermis) lesion","truncal ataxia, wide-based gait (แขนขาอาจปกติ)"]],
+tr:["47/1: ต้องบอกชื่อ test + รายงานปกติ/ไม่ปกติ — ปกติก็ต้องพูด “normal”","46/3: ตรวจครบ นั่ง ยืน นอน (ผู้ป่วยปกติหมด)","อาจารย์ med47 ฝาก: heel-to-shin ต้องลากลงตามหน้าแข้ง"]});
+
+S.push({id:"abd",cat:"pe",t:"Abdomen exam (Murphy)",ch:40,fq:"6/11 (50/2)",
+sc:"“วันนี้มาตรวจท้องนะคะ ขออนุญาตเปิดหน้าท้องตั้งแต่ลิ้นปี่ถึงหัวหน่าว · ตอนนี้ปวดท้องตรงไหนไหมคะ” (ตรวจจุดปวดเป็นจุดสุดท้าย) · เน้น ดู → ฟัง → เคาะ → คลำ",
+st:[
+["เตรียม (4 + 6 คะแนน)",[
+"เปิด::ล้างมือ แนะนำตัว ขออนุญาต · นอนหงาย หนุนหมอน แขนข้างลำตัว · เปิด xiphoid → pubic symphysis · ยืนขวาผู้ป่วย",
+"General::ดูสีหน้า (ปวด?) · jaundice (ตาขาว) · pallor"]],
+["ดู (5)",[
+"Inspection::contour flat/scaphoid/distended · symmetry · umbilicus midline · scar, striae · visible peristalsis · superficial vein dilatation · Cullen / Grey Turner sign · spider nevi, caput medusae"]],
+["ฟัง (5)",[
+"Bowel sound::diaphragm ฟังอย่างน้อย 1 นาที (ไม่ได้ยิน → ฟังนานขึ้น 3–5 นาที) · normoactive",
+"Bruit::bell: aorta, renal ×2, iliac ×2 · succussion splash"]],
+["เคาะ (12)",[
+"ทั่วท้อง::เคาะ 4 quadrants (เคาะ middle phalanx นิ้วกลาง)",
+"Liver span::ขอบบน: เคาะจาก ICS ลงตาม Rt. MCL · ขอบล่าง: จากระดับสะดือขึ้นไป → ปกติ <b>8–10 cm</b>",
+"Spleen::เคาะ lowest Lt. ICS แนว anterior axillary line ขณะหายใจเข้าเต็มที่ ทึบ = ม้ามโต",
+"CVA (5)::fist percussion ตับ / CVA tenderness"]],
+["คลำ (18)",[
+"ก่อนคลำ::ถามจุดปวดก่อน → คลำจุดนั้นสุดท้าย · มองสีหน้าตลอด",
+"Superficial::ใช้ฝ่ามือ/ข้อ MCP คลำเบา ๆ ทั้ง 4 quadrants",
+"Deep::ลึก > 2 cm (สองมือถ้าผนังหนา) หาก้อน: ขนาด รูปร่าง ผิว กดเจ็บ pulsatile",
+"Rebound::กดลึกช้า ๆ ค้างไว้ แล้วปล่อยเร็ว เจ็บตอนปล่อย = +",
+"Organ::ตับ: จาก RLQ ขึ้นตามแนว MCL ให้หายใจเข้าลึก · ม้าม: มือซ้ายรองซี่โครงล่างซ้าย คลำจาก RLQ ไป Lt costal margin (ไม่เจอ → ตะแคงขวา) · ไต: bimanual"]],
+["Murphy's sign (15)",[
+"① วางมือ::วางปลายนิ้วขวากดลึกใต้ Rt. costal margin ตรงจุดตัด MCL / ขอบ rectus",
+"② หายใจเข้า::ให้หายใจเข้าลึก ๆ สังเกตสีหน้า → เจ็บจนหยุดหายใจ (inspiratory arrest) = positive",
+"③ ทำซ้ำ::ตับโต → วางที่ขอบตับแล้วทำซ้ำ · เทียบฝั่งซ้าย"]],
+["Ascites (5) + ปิด (5+5)",[
+"Shifting dullness (3)::เคาะจากสะดือออกข้างจนทึบ → ตะแคงไปฝั่งตรงข้าม รอ ~30 วินาที เคาะซ้ำ ถ้าโปร่ง = + (~1.5 L)",
+"Fluid thrill (2)::ให้ผู้ป่วยวางสันมือกลางท้อง เคาะข้างหนึ่ง อีกมือรับคลื่น (น้ำมาก ~4–6 L)",
+"ปิด::สรุปผลเป็นภาษาอังกฤษ · แจ้งขอตรวจ PR · ขอบคุณ คลุมผ้า"]]
+],
+qa:[
+["Liver span ปกติ","8–10 cm (Rt. MCL)"],
+["Murphy's sign positive คือ","เจ็บจนหยุดหายใจเข้า (inspiratory arrest) ขณะกดใต้ Rt. costal margin → acute cholecystitis"],
+["Chronic liver stigmata (50/2)","jaundice · parotid enlargement · paper-money skin · palmar erythema · spider nevi · gynecomastia · caput medusae · asterixis"],
+["สรุปผลปกติ (ภาษาอังกฤษ)","Flat, no scar, normoactive bowel sound, no bruit, tympanic, liver span 9 cm, soft, not tender, no rebound, Murphy negative, liver and spleen not palpable, no shifting dullness"],
+["เช็คลิสต์ 100 คะแนน","เตรียม 4 · general 6 · ดู 5 · ฟัง 5 · เคาะ 12 · คลำ 18 · Murphy 15 · liver span 5 · CVA 5 · ascites 5 · สรุป 5 · ขอ PR 5"]],
+tr:["ทุกการตรวจ พูดชื่อ + แปลผลเป็นภาษาอังกฤษ","เคสส่วนใหญ่ปกติหมดยกเว้นอย่างเดียว","50/2 ให้รายงาน chronic liver stigmata ด้วย"]});
+
+S.push({id:"resp",cat:"pe",t:"Respiratory / chest exam",ch:35,fq:"8/11 (กอง 2 = 0/2)",
+sc:"“วันนี้จะมาตรวจปอดนะคะ ขออนุญาตเปิดเสื้อ” · ดู → คลำ → เคาะ → ฟัง · เทียบซ้าย-ขวา หน้า-หลังทุกขั้น",
+st:[
+["ดู (เดินรอบตัว)",[
+"Shape::AP : transverse ปกติ ~1 : 2 (barrel ~1 : 1) · pectus excavatum/carinatum · kyphosis/scoliosis",
+"มือ / ลิ้น::clubbing · central cyanosis (ลิ้น) · peripheral cyanosis",
+"Breathing::RR นับ 30 วินาที · pattern · accessory muscle · supraclavicular/intercostal retraction · paradoxical",
+"อื่น::collateral vein ที่อก/คอ (SVC obstruction) · scar · chest expansion + synchronization"]],
+["คลำ",[
+"LN::pre/postauricular · occipital · submandibular · submental · anterior/posterior cervical · supraclavicular · scalene",
+"Trachea::midline (กดข้าง trachea เทียบสองข้าง)",
+"Expansion::วางมือสองข้าง ให้หายใจลึก (ข้างผิดปกติขยับน้อย)",
+"Tactile fremitus::สันมือ/ขอบนิ้วก้อย ให้พูด “หนึ่ง-หนึ่ง-หนึ่ง” เทียบซ้าย-ขวา หน้า-หลัง · subcutaneous emphysema"]],
+["เคาะ",[
+"Percussion::เคาะข้อ DIP นิ้วกลางที่แนบอก ไล่จาก apex ลงล่าง เทียบซ้าย-ขวา หน้า-หลัง-ข้าง · diaphragmatic excursion"]],
+["ฟัง",[
+"Breath sound::หายใจลึกทางปาก · diaphragm · หน้า = UL/ML หลัง = LL · vesicular / bronchial",
+"Adventitious::crackles · wheeze · rhonchi · stridor · pleural rub",
+"Vocal resonance::“หนึ่ง-หนึ่ง-หนึ่ง” · whispering pectoriloquy · egophony (E → A)"]],
+["สรุป",[
+"Report::“Normal chest shape, no clubbing/cyanosis, trachea midline, equal chest expansion, equal tactile fremitus, resonance on percussion, vesicular breath sound, no adventitious sound, equal vocal resonance”"]]
+],
+qa:[
+["Consolidation","TF ↑ · dull · bronchial breath sound · crackles · VR ↑ · egophony"],
+["Pleural effusion","TF ↓ · stony dull · BS ↓ · VR ↓ · trachea shift ออกจากข้างที่เป็น (ถ้ามาก)"],
+["Pneumothorax","TF ↓ · hyperresonance · BS ↓ · tension → trachea shift ออก"],
+["Atelectasis / collapse","TF ↓ · dull · BS ↓ · trachea ดึง <b>เข้าหา</b> ข้างที่เป็น"],
+["COPD","barrel chest · hyperresonance · BS ↓ · prolonged expiration · wheeze"]],
+tr:["46/1, 51/1 “ไม่ต้อง diag” แต่ 48/1 ให้ “รายงานผล” → พูดสรุป positive/negative ทิ้งท้ายทุกครั้ง","ฐานนี้ยังไม่เคยอยู่กอง 2 (0/2) แต่ออก 8/11 โดยรวม"]});
+
+S.push({id:"motor",cat:"pe",t:"Motor power · DTR · Visual field · CN V",ch:15,fq:"motor 46/3 · VF 46/2",
+sc:"บอกชื่อการตรวจ + เทียบซ้าย-ขวาทุกครั้ง · รายงานเป็นภาษาอังกฤษ",
+st:[
+["Motor",[
+"ดู::muscle atrophy · fasciculation · tone (passive movement) · pronator drift",
+"แขน::deltoid · biceps · brachioradialis · triceps · wrist ext/flex · finger ext/flex · finger abduction (dorsal interossei) / adduction (palmar interossei) · grip",
+"ขา (นอน)::iliopsoas (ยกต้นขา) · quadriceps (เหยียดเข่า) · hamstrings (งอเข่า) · tibialis anterior (กระดกข้อเท้า) · gastrocnemius (กดข้อเท้าลง) · EHL (กระดกนิ้วโป้ง) · FHL/FDL"]],
+["MRC grade",[
+"0–2::0 ไม่ขยับเลย · 1 กล้ามเนื้อหดตัว/กระตุก · 2 ขยับได้ในแนวราบ (ตัดแรงโน้มถ่วง)",
+"3–5::3 ต้านแรงโน้มถ่วงได้ · 4 ต้านแรงผู้ตรวจได้บางส่วน · 5 ปกติ"]],
+["DTR",[
+"Reflex::biceps C5–6 · brachioradialis C5–6 · triceps C7 · patellar L3–4 · Achilles S1 · Babinski · clonus · grade 0–4+ (2+ ปกติ)"]],
+["Visual field (confrontation)",[
+"ตำแหน่ง::นั่งตรงข้าม ห่าง ~2–3 ฟุต ระดับตาเท่ากัน · ผู้ป่วยปิดตาซ้าย ผู้ตรวจปิดตาขวา (ตาตรงข้ามกัน)",
+"ทดสอบ::ให้มองตาผู้ตรวจ · ขยับนิ้วจากขอบนอกเข้ามาทั้ง 4 quadrants บอกทันทีที่เห็น · เทียบกับ field ผู้ตรวจ · สลับตา",
+"รายงาน::ตาข้างไหน quadrant ไหนหาย (46/2: ตาซ้ายมองได้แคบลง)"]],
+["CN V",[
+"CN V::sensory V1/V2/V3 (สำลี) เทียบสองข้าง · กัดฟัน คลำ masseter/temporalis · อ้าปากต้านแรง (คางเบี้ยวไปข้างที่ผิดปกติ) · corneal reflex (V1 afferent, VII efferent) · jaw jerk"]]
+],
+qa:[
+["Bitemporal hemianopia","optic chiasm (pituitary adenoma)"],
+["Homonymous hemianopia","optic tract / radiation / occipital lobe ข้างตรงข้าม"],
+["Monocular visual loss","optic nerve / retina ข้างนั้น"],
+["Superior quadrantanopia (pie in the sky)","temporal lobe (Meyer's loop) ข้างตรงข้าม"]],
+tr:["บอกชื่อกล้ามเนื้อ + เทียบสองข้าง","รายงาน VF เป็นตาข้างไหน ส่วนไหนหาย"]});
+
+S.push({id:"cvs",cat:"pe",t:"CVS exam",ch:10,fq:"ยังไม่เคยออก",
+sc:"เริ่มจากท่านั่ง ดูทั่วไป → pulse → นอน 45° ดู JVP → precordium",
+st:[
+["ดูทั่วไป",[
+"หน้า::pale conjunctiva · icteric sclera · xanthelasma · central cyanosis (ลิ้น) · thyroid",
+"อก / มือ / ขา::pectus excavatum/carinatum · clubbing · Osler node · splinter hemorrhage · Janeway lesion (IE) · capillary refill < 2 วินาที · pitting edema"]],
+["Pulse",[
+"Radial::rate rhythm character · collapsing pulse: ยกแขนผู้ป่วยขึ้น จับข้อมือ แรงขึ้น = AR / high output",
+"เทียบ::radio-radial · radio-femoral delay (coarctation) · brachial femoral popliteal posterior tibial dorsalis pedis",
+"Carotid::คลำทีละข้าง ห้ามพร้อมกัน + ฟัง bruit"]],
+["JVP",[
+"JVP::นอน 45° หันหน้าซ้ายเล็กน้อย · internal JV อยู่ใต้ SCM ดู pulsation · กดได้ = jugular, คลำได้ = carotid · สูงจาก sternal angle > 4 cm = JVP ↑ · hepatojugular reflux"]],
+["Precordium",[
+"คลำ::apex beat 5th ICS MCL · heave (สันมือ LSB) · thrill · palpable P2 (2nd LICS → pulmonary HT)",
+"ฟัง::aortic (2nd RICS) → pulmonic (2nd LICS) → tricuspid (LLSB) → mitral (apex) · diaphragm แล้ว bell (S3 S4 MS)",
+"Maneuver::MS: bell ตะแคงซ้าย หายใจออก · AR: diaphragm นั่งโน้มไปหน้า กลั้นหายใจออก · ฟัง radiation (axilla, carotid) · abdominal bruit"]]
+],
+qa:[
+["Murmur ตามโรค","MR, TR: pansystolic · AS, PS: ejection systolic · MS, TS: rumbling diastolic · AR, PR: blowing early diastolic"],
+["S3 / S4","S3 = LV systolic dysfunction / volume overload · S4 = LV diastolic dysfunction (stiff LV)"],
+["ชีพจรใน AS / AR","AS: pulsus parvus et tardus · AR: collapsing (water-hammer) pulse"]],
+tr:["ยังไม่เห็นในชุดที่รวบรวม (โอกาสต่ำ)"]});
+
+/* ===== Lab ===== */
+S.push({id:"pbs",cat:"lab",t:"Blood smear (PBS) ×2 ฐาน",ch:95,fq:"11/11",
+sc:"แม่แบบ: <b>RBC → WBC → Platelet → Dx → Ix → (complication / Tx ถ้าถาม)</b> · จับ slide clamp ไว้ขณะปรับ focus",
+st:[
+["ส่อง / นับ",[
+"10×::นับ WBC ต่อช่อง × 200–250 ≈ WBC/µL (ปกติ ~18–40 ตัว/ช่อง: > 40 leukocytosis, < 18 leukopenia) · ดู anisopoikilocytosis",
+"100× (oil)::ชนิด WBC · RBC สี ขนาด รูปร่าง · platelet นับต่อช่อง × 20,000 (ปกติ ~7–23 ตัว = 150,000–450,000 · < 5 ตัว ≈ < 100,000)"]],
+["RBC",[
+"สี + ขนาด::normochromic / hypochromic · normocytic / microcytic / macrocytic",
+"รูปร่าง::anisocytosis / poikilocytosis (few, 1+ ถึง 4+) · target · tear drop · spherocyte / microspherocyte · schistocyte · pencil · bite / blister · ovalocyte · acanthocyte · burr",
+"อื่น::polychromasia · NRBC · inclusion (basophilic stippling, Howell-Jolly) · rouleaux / autoagglutination"]],
+["WBC",[
+"WBC::increased / normal / decreased · ชนิดเด่น (blast, lymphocyte, myeloid ทุก stage, atypical lymphocyte, smudge cell) · Auer rod · hypersegmented neutrophil"]],
+["Platelet",[
+"Plt::adequate / decreased / increased · giant platelet · clumping"]],
+["สรุป",[
+"สรุป::Dx (technical term) → Ix ยืนยัน → complication / Tx (ถ้าถาม)"]]
+],
+qa:[
+["หญิง 40 ซีดเพลีย 2–3 เดือน ไม่ไข้ ไม่จุดเลือด ไม่เหลือง ตับม้ามไม่โต (± atrophic glossitis, koilonychia)","Hypochromic microcytic, aniso-poikilo 1+, target few, pencil cell 1+, WBC ปกติ, Plt ↑ → <b>Iron deficiency anemia</b> · Ix iron study (ferritin, SI/TIBC), stool occult blood/parasite · Tx ferrous sulfate"],
+["ชาย 18 ซีด เหลืองตั้งแต่เด็ก ตับโต 2 cm ม้ามโต 8 cm","Hypochromic microcytic, aniso-poikilo 3+, target 2+, tear drop 1+, ovalocyte, polychromasia, NRBC → <b>Thalassemia (β-thal/HbE)</b> · Ix Hb typing / electrophoresis"],
+["ชาย 27 ไข้ ซีดเพลีย 4 วัน เหลืองเล็กน้อย ม้ามโต 3 cm","Hypochromic microcytic 3+, target 2+, spherocyte 1+, ovalocyte, NRBC → <b>Thalassemia (HbH) with hemolytic crisis จากไข้</b> · Ix Hb electrophoresis"],
+["ชาย 20 ซีดเพลีย 2 วันหลังมีไข้ ปัสสาวะสีเข้มมาก เหลืองเล็กน้อย","Leukocytosis (left shift), NCNC, blister cell 1+, ghost cell, eccentrocyte, polychromasia → <b>G6PD deficiency with acute hemolysis</b> · Ix G6PD level (ระหว่างแตกอาจปกติลวง ตรวจซ้ำ ~2–3 เดือน), K, BUN/Cr, EKG · Cx hyperK, AKI, DIC, cardiac arrest, acidosis"],
+["หญิง 36 ซีดอ่อนเพลียมาก 2 สัปดาห์ ปัสสาวะเข้ม เหลืองเล็กน้อย ตับม้ามไม่โต","NCNC, microspherocyte 2+, polychromasia 2+, autoagglutination → <b>Autoimmune hemolytic anemia</b> · Ix direct antiglobulin (Coombs) test · Tx prednisolone 1 mg/kg/d จน Hct > 30% แล้ว taper (ก่อน steroid: CXR, FBS, stool strongyloides)"],
+["หญิง 30 ไข้ ซีด 3 วัน เหลืองเล็กน้อย ม้ามโต 2 cm","NCNC, spherocyte 3+ (ไม่ใช่ micro), polychromasia 2+ → <b>Hereditary spherocytosis</b> · Ix osmotic fragility test · Cx pigment gallstone · Tx transfusion, splenectomy"],
+["ชาย 30 ซีด อ่อนเพลีย จ้ำเลือด 3 สัปดาห์ ไม่ไข้ petechiae/purpura ตับม้ามไม่โต","NCNC, WBC ↓, Plt ↓ (pancytopenia) → <b>Aplastic anemia</b> · Ix bone marrow biopsy (hypocellular)"],
+["ชาย 35 ซีดเพลีย 2–3 เดือน ปัสสาวะสีเข้มตอนเช้า เหลืองเล็กน้อย","NCNC, aniso 1+, polychromasia 1+, NRBC few, Plt ↓ → <b>PNH</b> · Ix urine hemosiderin, flow CD55/CD59, Ham (acidified serum) test"],
+["หญิง 30 เลือดออกตามไรฟัน 10 วัน ไม่ซีด ตับม้ามไม่โต","NCNC, Plt ↓ + giant platelet → <b>Immune thrombocytopenia (ITP)</b>"],
+["ชาย 17 ไข้ 4 วัน แน่นท้อง อาเจียนเป็นเลือด จุดเลือดออก ตับโต 2 cm","NCNC, WBC ↓ + atypical lymphocyte, Plt ↓ → <b>Dengue hemorrhagic fever</b> · Ix Hct (hemoconcentration), NS1 / dengue IgM"],
+["ชาย 50 ซีด อ่อนเพลีย 1 เดือน เลือดออกตามไรฟัน","WBC ↑ with myeloblast (± Auer rod), NCNC, Plt ↓ → <b>AML</b> · Ix bone marrow: blast > 20%, flow cytometry"],
+["ALL ต่างจาก AML บน smear อย่างไร","lymphoblast (เล็กกว่า โครมาตินละเอียด ไม่มี Auer rod) · มักมีต่อมน้ำเหลืองโต ตับม้ามโต"],
+["ชาย 40 คลำได้ก้อนท้องซ้าย 2 เดือน ม้ามโต 12 cm","WBC ↑↑ myeloid ทุก stage (segment, band, metamyelocyte, myelocyte) + eosinophil, basophil, Plt ↑ → <b>CML</b> · Ix BCR-ABL / Philadelphia t(9;22)"],
+["ชาย 65 ซีด เพลีย แน่นท้องซ้าย 2 เดือน ม้ามโต 12 cm","NCNC, tear drop 2+, WBC ↑ myeloid (leukoerythroblastic), Plt ↑ → <b>Primary myelofibrosis</b> · Ix BM biopsy (dry tap, fibrosis), JAK2"],
+["หญิง 65 ซีดเพลีย 2 เดือน ปวดหลัง","NCNC + <b>rouleaux formation</b> → <b>Multiple myeloma</b> · Ix SPEP/UPEP, serum free light chain, Ca, Cr, skeletal survey, BM plasma cell ≥ 10%"],
+["ชาย 60 ไม่มีอาการ ตรวจพบ WBC สูง","small mature lymphocyte เด่น + smudge cell → <b>CLL</b> · Ix flow cytometry"],
+["Malaria บน smear","P. falciparum: ring form ± Plt ↓ · P. vivax: amoeboid trophozoite + Schüffner's dots · Ix thick/thin film"],
+["Macro-ovalocyte + hypersegmented neutrophil","Megaloblastic anemia → B12 / folate level"],
+["Schistocyte + polychromasia + Plt ↓","MAHA → DIC / TTP / HUS"],
+["ระดับ aniso/poikilocytosis (ตัวต่อช่อง)","few 5–10 · 1+ 11–25 · 2+ 26–50 · 3+ 51–75 · 4+ 76–100"],
+["ระดับ polychromasia (ตัวต่อช่อง)","few 1–4 · 1+ 5–10 · 2+ 11–15 · 3+ 16–20 · 4+ > 20"],
+["Basophilic stippling / Howell-Jolly body","stippling (RNA): thalassemia, hemolytic anemia, lead poisoning · Howell-Jolly (DNA): asplenia, hemolytic anemia"],
+["Clinical clue → smear","ซีดเรื้อรัง ไม่เหลือง ตับม้ามไม่โต → IDA · ซีด เหลือง ม้ามโต เป็น ๆ หาย ๆ → thal / HS / AIHA · ไข้สูง จุดเลือดออก ตับโต → dengue · ไข้ ซีด เลือดออก → acute leukemia · ม้ามโตมาก ไม่ไข้ → CML / myelofibrosis · สูงอายุ ปวดหลัง → MM"]],
+tr:["บรรยายเป็นระบบ RBC → WBC → Plt ก่อนบอก Dx เสมอ","เคยออกบ่อย: IDA ≈ thal/HbH > AIHA > acute leukemia > CML (51/1 ใช้ AML)","ภาพเลื่อนเอง → จับ slide clamp ไว้ขณะปรับ focus"]});
+
+S.push({id:"gram",cat:"lab",t:"Gram stain",ch:92,fq:"10/11",
+sc:"ท่องเป็นเซ็ต: <b>ลักษณะ → เชื้อ → specimen → ยา</b> (51/1 ถามแค่บรรยาย + ชื่อเชื้อ แต่ชุดอื่นถามยา/โรคด้วย)",
+st:[
+["บรรยาย",[
+"สี::Gram positive (ม่วง) / Gram negative (แดง-ชมพู)",
+"รูปร่าง::cocci / bacilli / coccobacilli · เรียง cluster / chain / pair (diplococci, lancet) · capsule · intracellular · bipolar (safety pin) · spore",
+"พื้นหลัง::PMN · epithelial cell (คุณภาพเสมหะ)",
+"ตอบ::organism → specimen ที่พบบ่อย → empirical drug"]]
+],
+qa:[
+["G+ cocci in cluster","<b>S. aureus</b> · pus, psoas abscess, synovial fluid · dicloxacillin / cloxacillin"],
+["G+ cocci in chain","<b>S. pyogenes</b> · pus · penicillin (46/3 ตอบ amoxicillin)"],
+["G+ lancet-shaped diplococci (มี capsule)","<b>S. pneumoniae</b> · sputum, pleural fluid, CSF · ceftriaxone ± azithromycin"],
+["G+ cocci in pairs / short chain (urine ผู้สูงอายุ)","<b>Enterococcus</b> · urine · ampicillin"],
+["G– short rod with capsule","<b>Klebsiella pneumoniae</b> · sputum, liver abscess, urine · ceftriaxone (± azithromycin)"],
+["G– bipolar staining (safety pin)","<b>Burkholderia pseudomallei</b> · liver abscess, CAP · ceftazidime"],
+["G– straight / slightly curved rod (sputum on ventilator)","<b>Pseudomonas aeruginosa</b> · HAP/VAP · ceftazidime / piperacillin-tazobactam"],
+["G– coccobacilli (sputum on ventilator)","<b>Acinetobacter baumannii</b> · VAP · imipenem (± colistin, sulbactam)"],
+["G– intracellular diplococci","<b>Neisseria gonorrhoeae</b> (CSF → N. meningitidis) · pus, CSF · ceftriaxone"],
+["G– bacilli ใน urine","<b>E. coli</b> · UTI · ceftriaxone"],
+["G– pleomorphic coccobacilli (encapsulated) ใน CAP","<b>H. influenzae</b> · amoxicillin"],
+["G+ large rod with spore (เกษตรกร DM คุมไม่ดี 50/3)","<b>Bacillus anthracis</b> · ciprofloxacin / doxycycline (penicillin ถ้าไวต่อยา)"],
+["AFB: acid-fast bacilli (ย้อม ZN แดงบนพื้นฟ้า)","<b>Mycobacterium tuberculosis</b> · sputum · 2HRZE/4HR (E → optic neuritis, H → neuropathy)"],
+["Modified AFB + branching filamentous bacilli","<b>Nocardia</b> · sputum, brain abscess · cotrimoxazole (Bactrim)"],
+["Budding yeast + pseudohyphae (urine)","<b>Candida</b> · fluconazole"],
+["India ink: encapsulated budding yeast (CSF)","<b>Cryptococcus</b> · amphotericin B + fluconazole"],
+["คุณภาพเสมหะ (true sputum)","epithelial cell ≤ 10/LPF + WBC ≥ 25/LPF"],
+["เคยออกฐาน Gram อะไรบ้าง","S. pneumoniae (46/1, 46/2) · S. pyogenes (46/3) · GNB liver abscess (47/3) · Acinetobacter (48/1) · B. anthracis (50/3) · S. aureus (51/1)"]],
+tr:["ท่อง “ลักษณะ → เชื้อ → ยา” เป็นเซ็ตเดียว","เชื้อต่างกันทุกกอง ต้องจำทั้งตาราง"]});
+
+S.push({id:"cxr",cat:"lab",t:"Chest X-ray ×4 ฐาน",ch:95,fq:"11/11",
+sc:"พูดลำดับเดียวกันทุกฟิล์ม: <b>ID → quality → lines → trachea → heart → mediastinum → lung → pleura → diaphragm → bone → soft tissue → impression + DDx 2 + Ix</b>",
+st:[
+["ลำดับการบรรยาย",[
+"① ID::ชื่อ อายุ เพศ วันที่ · PA/AP · upright/supine",
+"② Quality::rotation (spinous process กึ่งกลางระหว่าง medial end clavicle) · inspiration (posterior rib ≥ 9–10) · exposure (เห็น vertebra หลังเงาหัวใจจาง ๆ)",
+"③ Lines::ETT (ปลายเหนือ carina ~3–5 cm) · C-line · NG · ICD · pacemaker → ตำแหน่งเหมาะสมไหม",
+"④ อวัยวะ::Trachea (shift?) → Heart (CTR, chamber) → Mediastinum/hilum → Lung (เทียบซ้าย-ขวาทีละ zone) → Pleura (CP angle) → Diaphragm (free air) → Bone → Soft tissue",
+"⑤ สรุป::Impression + DDx 2 โรค + ส่งตรวจอะไรต่อ"]],
+["Heart",[
+"CT ratio::กว้างสุดของหัวใจ ÷ กว้างสุดของทรวงอก · ปกติ < 0.5 (PA)",
+"LAE::carina angle > 75° · double contour · ขอบซ้ายหัวใจตรง",
+"RAE / RVH / LVH::RAE: ขอบขวาโป่ง · RVH: boot shape (apex ยกขึ้น) · LVH: apex ลงล่าง/ออกซ้าย",
+"Shape::globular: pericardial effusion, multivalvular, DCM · tubular: COPD"]],
+["Mediastinum",[
+"Anterior::3T + 1L: Thyroid, Thymoma, Teratoma, Lymphoma → silhouette ขอบหัวใจ/ascending aorta",
+"Middle::3A: Adenopathy, Aneurysm, Abnormal vessel/cyst",
+"Posterior::neurogenic tumor → silhouette descending aorta"]]
+],
+qa:[
+["TB (active)","patchy infiltrate / cavity ที่ upper lobe ± air-fluid level, effusion, hilar LN · Ix sputum AFB/culture/PCR (GeneXpert), anti-HIV, CBC"],
+["Miliary TB","nodule เล็ก ๆ ขนาดเท่ากันกระจายทั่วสองปอด · Ix sputum AFB/PCR, CT, anti-HIV"],
+["Pleural effusion","blunted CP angle · meniscus sign · homogeneous opacity · mediastinum shift ออก (ถ้ามาก) · Ix U/S, thoracentesis (Light's criteria)"],
+["Atelectasis","opacity + volume loss: fissure/trachea/mediastinum ดึงเข้าหา · diaphragm ยก · ซี่โครงชิด · Golden S sign (RUL collapse + hilar mass) · Ix bronchoscopy, CT"],
+["Total lung opacity: atelectasis vs massive effusion","atelectasis → trachea/mediastinum shift <b>เข้าหา</b> · effusion → shift <b>ออก</b>"],
+["Lung mass / CA","ก้อนเดี่ยว ขอบ spiculated ขนาด … cm · Pancoast (ยอดปอด) · Ix CT chest, biopsy"],
+["Anterior mediastinal mass","mediastinum กว้าง · silhouette ขอบหัวใจ/ascending aorta · hilum overlay sign · Ix lateral CXR, CT, biopsy"],
+["COPD","diaphragm ต่ำแบน · intercostal space กว้าง · tubular heart · retrosternal space กว้าง · Ix spirometry (post-BD FEV1/FVC < 0.7)"],
+["Pulmonary edema","bat-wing · Kerley B line · cephalization · cardiomegaly · effusion · Ix echo, BNP"],
+["Bronchiectasis","tram track · ring shadow · bronchial wall thickening · Ix HRCT"],
+["Lobar pneumonia","homogeneous opacity + air bronchogram กลีบเดียว · silhouette sign · Ix sputum Gram/culture, hemoculture"],
+["Pneumothorax","visceral pleural line · ไม่มี lung marking ต่อ · deep sulcus (supine) · tension = mediastinum shift → needle decompression · ICD"],
+["Silhouette sign","RML → ขอบขวาหัวใจหาย · lingula → ขอบซ้ายหัวใจหาย · LLL → hemidiaphragm ซ้าย/descending aorta หาย"],
+["ฟิล์มที่น่าจะเจอ (เรียงโอกาส)","TB/miliary ~60% · effusion ~50% · mass ~35% · ant. mediastinum ~35% · COPD ~30% · atelectasis ~30% · pul. edema ~25% · bronchiectasis ~15%"]],
+tr:["med51 กอง 1 ใช้ mass / infiltrate / ant. mediastinum / total atelectasis (ตรงกับ 50/3 ทั้ง 4 ข้อ)","พูดคุณภาพฟิล์มก่อนทุกครั้ง","ต้องมี DDx 2 โรค + ส่งตรวจต่อ"]});
+
+S.push({id:"ekg",cat:"lab",t:"EKG",ch:95,fq:"11/11",
+sc:"ลำดับ: <b>Rate → Rhythm → Axis → P → PR → QRS → ST/T → QTc → Dx + DDx</b> · 10 mm = 1 mV · 25 mm/s",
+st:[
+["ลำดับ",[
+"Calibration::10 mm = 1 mV · 25 mm/s · 1 ช่องเล็ก = 0.04 s (0.1 mV) · 1 ช่องใหญ่ = 0.2 s",
+"Rate::RR สม่ำเสมอ: 300 ÷ ช่องใหญ่ หรือ 1500 ÷ ช่องเล็ก · ไม่สม่ำเสมอ: QRS ใน 6 s (30 ช่องใหญ่) × 10",
+"Rhythm::sinus (P นำทุก QRS, P บวกใน II): brady < 60 / normal 60–100 / tachy > 100 · AF (ไม่มี P, irregularly irregular) · flutter (sawtooth) · junctional · ventricular · paced (spike)",
+"Axis::I+ aVF+ = normal · I+ aVF– = LAD (เช็ค II) · I– aVF+ = RAD · หา lead biphasic แล้วตั้งฉาก",
+"Waves::P (II, V1) → PR → QRS (กว้าง, voltage, Q) → ST → T → QTc → สรุป Dx + DDx"]],
+["Chamber",[
+"RAE::P pulmonale: P สูง > 2.5 mm ใน II",
+"LAE::P mitrale: P กว้าง > 0.12 s มีรอยหยักใน II · P ลบใน V1 > 1 ช่องเล็ก",
+"LVH::Sokolow-Lyon S V1 + R V5/V6 > 35 mm (7 ช่องใหญ่) · R aVL ≥ 11 mm · Cornell R aVL + S V3 > 28 (ชาย) / > 20 mm (หญิง)",
+"RVH::R/S > 1 ใน V1 · R/S < 1 ใน V6 · RAD · T inversion V1–V3/V4"]],
+["Conduction",[
+"AV block::1st: PR > 0.2 s (> 5 ช่องเล็ก) ทุก P มี QRS · Mobitz I: PR ยาวขึ้นแล้ว drop · Mobitz II: PR คงที่แล้ว drop · 3rd: P กับ QRS ไม่สัมพันธ์กัน",
+"RBBB::QRS ≥ 0.12 s · rSR′ ใน V1–V2 · wide slurred S ใน I, V6",
+"LBBB::QRS ≥ 0.12 s · broad notched R ใน I, aVL, V5–V6 · deep S ใน V1"]],
+["ST / T / QT",[
+"STE::≥ 1 mm ใน 2 contiguous leads (V2–V3: ชาย ≥ 40 ปี ≥ 2 mm · ชาย < 40 ปี ≥ 2.5 mm · หญิง ≥ 1.5 mm)",
+"T::T ลบปกติได้ใน aVR, V1 · hyperacute/peaked T → hyperkalemia",
+"QTc::QT / √RR · ยาว: ชาย > 440 ms, หญิง > 460 ms"]]
+],
+qa:[
+["MI territory","V1–V4 septal/anterior: LAD · I, aVL, V5–V6 lateral: LCx · II, III, aVF inferior: RCA · V7–V9 posterior: LCx + PDA · V3R–V4R RV: RCA"],
+["ST ยกใน inferior ต้องทำอะไรต่อ / ST กดใน V1–V3","V3R–V4R หา RV infarct · V7–V9 หา posterior MI"],
+["สาเหตุ RAD","RVH · acute PE · ASD secundum · lateral wall MI · เด็ก"],
+["สาเหตุ LAD","LVH · inferior wall MI · LAFB"],
+["RVH + LAE vs RVH ไม่มี LAE","มี LAE → mitral stenosis (left atrial myxoma) · ไม่มี LAE → PAH, pulmonic stenosis, TOF"],
+["รุ่นพี่ ①: dyspnea 6 เดือน, split S2 + SEM ที่ LUSB","rate 75, NSR, axis 120° (RAD), RVH (R > S V1, S > R V6), no LAE, notch ใน II/III/aVF, T inv V1–V4 → <b>Atrial septal defect</b>"],
+["รุ่นพี่ ②: ชาย 80 syncope, PE ปกติ","rate 36, atrial flutter, axis –75° (LAD), RBBB, P ไม่สัมพันธ์ QRS → <b>Atrial flutter with complete AV block</b>"],
+["รุ่นพี่ ③: ชาย 50 EKG ผิดปกติ ไม่มีอาการ","rate 120 sinus tachy, axis +165°, poor R progression, P บวกใน aVR, P ลบใน I/aVL → <b>Dextrocardia</b>"],
+["รุ่นพี่ ④: ชาย 60 แน่นอก + syncope, BP 80/40, JVP engorged, no murmur","rate 46 sinus brady, axis +75°, 1st-degree AVB, STE III/aVF, ST depress aVL → <b>Inferior wall MI + 1st-degree AV block</b> (hypotension + JVP สูง → นึกถึง RV infarct, ทำ V3R–V4R)"],
+["รุ่นพี่ ⑤: หญิง 30 เหนื่อย 6 เดือน orthopnea/PND, soft S1, PSM gr IV ที่ apex ร้าว axilla","rate 83, NSR, axis 45°, LAE + LVH, ST depress + T inv V4–V6 และ inferior → <b>HF with MR</b>"],
+["EKG ที่เคยออกในสนาม","46/3 RVH + T inv V1–V4 + PR ยาว + RAD 135° (SEM LUSB, fixed split S2) · 47/3, 48/1 LAE + RVH · 47/1 MI + LVH · 51/1 LVH · 50/3 PS · 46/2 RAE"],
+["โอกาสเจอ","RVH ~30% · LAE + RVH (MS) ~30% · LVH ~25% · MI ~20% · RAE/arrhythmia ~15%"]],
+tr:["ตอบตามลำดับ rate / rhythm / axis / abnormality / Dx ทุกครั้ง","hypertrophy / chamber enlargement เด่นสุดในสนาม"]});
+
+S.push({id:"stool",cat:"lab",t:"Stool exam · Hct · UA",ch:12,fq:"stool 2/11 (46/3, 47/1)",
+sc:"หาไข่/ตัวให้ครบตามโจทย์ (46/3: ไข่ 3 + ตัว 2) แล้วบอก <b>ชื่อ · ระยะติดต่อ · ยา</b>",
+st:[
+["Wet preparation",[
+"ดูด้วยตา::สี ความข้นเหลว มูก เลือด",
+"ทำสไลด์::เขี่ยอุจจาระเล็กน้อย ป้ายบาง + NSS 0.85% 1 หยด ผสม ปิด cover slip ไม่ให้มีฟอง",
+"ส่อง::10× หาไข่ → ยืนยันที่ 40×"]],
+["Hct · UA",[
+"Hct::ดูดเลือดใส่ capillary tube ~¾ อุดปลายด้วยดินน้ำมัน ปั่น 12,000 rpm 5 นาที อ่านด้วย chart",
+"UA::specific gravity (refractometer 1.003–1.030) · dipstick · ปั่นตะกอน 2,000 rpm 5 นาที ส่อง RBC WBC cast crystal"]]
+],
+qa:[
+["Hookworm egg (เปลือกบาง 4–8 cell)","albendazole / mebendazole · ตัวอ่อนไชผ่านผิวหนัง"],
+["Strongyloides rhabditiform larva","ivermectin (ระวัง hyperinfection ถ้าได้ steroid)"],
+["Ascaris egg (เปลือกหนาขรุขระ)","albendazole / mebendazole"],
+["Trichuris egg (รูปถังเบียร์ มีจุก 2 ข้าง)","albendazole / mebendazole"],
+["Capillaria philippinensis (กินปลาดิบ)","mebendazole / albendazole"],
+["Opisthorchis viverrini egg (เล็ก มีฝาปิด · ปลาน้ำจืดดิบ)","praziquantel"],
+["Paragonimus egg (มีฝาปิด · ปู/กุ้งน้ำจืดดิบ)","praziquantel"],
+["Taenia egg (เปลือกมีลายรัศมี)","praziquantel / niclosamide"],
+["Enterobius egg (แบนด้านหนึ่ง · scotch tape)","albendazole / mebendazole"],
+["Entamoeba histolytica cyst (4 nuclei) / trophozoite กิน RBC","metronidazole"],
+["Cryptosporidium (modified AFB)","ART ในผู้ติดเชื้อ HIV · Isospora/Cyclospora → cotrimoxazole"]],
+tr:["โอกาสต่ำ (~10–20%) อ่านผ่านพอ"]});
+
+/* ===== ตัวเลขต้องจำ ===== */
+var NUMS=[
+["CPR","100–120/min · ลึก ≥ 5 cm · 30:2 · pulse check ≤ 10 s · เปลี่ยนคนทุก 2 นาที (5 cycles) · O₂ ambu 10–12 L/min"],
+["ล้างมือ","7 ขั้น · alcohol rub ~20–30 s · 5 moments"],
+["Orthostatic","นอนพัก 5 นาที · วัดที่ 1 และ 3 นาทีหลังยืน · SBP ↓ ≥ 20 / DBP ↓ ≥ 10 / pulse ↑ ≥ 15–20"],
+["BP technique","cuff กว้าง 40% รอบแขน · ขอบล่างเหนือข้อพับ 2–3 cm · ปั๊มเกิน 20–30 mmHg · ปล่อย 2 mmHg/s"],
+["Rehab","เปลี่ยนท่าทุก 2 ชม. · ข้อเท้า 90° · นอนหงายกดทับบ่อยสุด = sacrum"],
+["DTX","FBS < 100 ปกติ · 100–125 pre-DM · ≥ 126 DM · random < 180 (โพย) · ใช้หยดที่ 2"],
+["NG feeding","หัวสูง 30–45° · residual < 50 mL ดันกลับ · ถุงสูง 30 cm · flush 20–30 mL · นั่งต่อ 30–60 นาที · NG ≤ ~1 เดือน/สาย"],
+["Post-MI targets","LDL < 70 · BP < 140/90 · HbA1c < 6.5% · exercise 150 min/wk · BMI < 23 · NTG ทุก 5 นาที สูงสุด 3"],
+["MDD / psychosis","MDD ≥ 5/9 ≥ 2 wk · brief psychotic 1 วัน–< 1 เดือน · schizophreniform 1–6 เดือน · schizophrenia ≥ 6 เดือน"],
+["Migraine w/o aura","5-4-3-2-1: ≥ 5 attacks · 4–72 ชม. · 2/4 ลักษณะ · 1/2 อาการร่วม"],
+["Seizure","status epilepticus ≥ 5 นาที · ขับรถเมื่อคุมชักได้ ≥ 1 ปี (โพย)"],
+["SLE 2019","ANA ≥ 1:80 + score ≥ 10 + clinical ≥ 1"],
+["Nephrotic","proteinuria > 3.5 g/d · albumin < 3 g/dL"],
+["Abdomen","liver span 8–10 cm · shifting dullness ~1.5 L · fluid thrill ~4–6 L"],
+["Chest","AP:transverse 1:2 (barrel 1:1) · RR นับ 30 s"],
+["JVP","> 4 cm เหนือ sternal angle = สูง · นอน 45°"],
+["Smear count","WBC/ช่อง (10×) × 200–250 · Plt/ช่อง (100×) × 20,000 · Plt ปกติ ~7–23 ตัว/ช่อง"],
+["Sputum quality","epithelial ≤ 10/LPF + WBC ≥ 25/LPF"],
+["CXR","CTR < 0.5 · posterior rib ≥ 9–10 · LAE carina angle > 75°"],
+["EKG ตัวเลข","1 ช่องเล็ก 0.04 s · rate 300/ช่องใหญ่ · PR > 0.2 s · QRS ≥ 0.12 s · RAE P > 2.5 mm · LAE P > 0.12 s · LVH > 35 mm · R aVL ≥ 11 · Cornell 28/20 · QTc 440/460"],
+["มุมเข็ม","IM 90° · SC 45–60° · ID < 15° · IV 10–30° · IV catheter 22G"],
+["Hct / UA","Hct ปั่น 12,000 rpm 5 นาที · UA SG 1.003–1.030 · ปั่นตะกอน 2,000 rpm 5 นาที"]];
+
+/* ===== กับดัก (F1) ===== */
+var TRAPS=[
+["ซักประวัติ","อย่ารีบ jump to diagnosis · ถามเจาะจง (ปัสสาวะเป็นฟองไหม ไม่ใช่แค่ “ปกติไหม”)"],
+["ชัก","ถามญาติ + ถามเองว่ากัดลิ้น/ปัสสาวะราดไหม · รู้สึกตัวไหม"],
+["จิตเวช","ถาม substance use ตรง ๆ (ครั้งสุดท้าย/หยุดนานเท่าไร) · แยก mania / psychosis / โรคทางกาย · ถามแผนฆ่าตัวตาย + อุปกรณ์"],
+["ทุกฐานซัก","ถามแพ้ยา ยาประจำ ครอบครัว · ปิดด้วย “มีอะไรอยากเล่าเพิ่ม” + สรุป"],
+["รายงานเคส","จดระหว่างซัก · ตอบวินิจฉัยเป็น technical term คำเดียวที่เจาะจง"],
+["Orthostatic","นอนพัก 5 นาที · วัดที่ 1 และ 3 นาที · จับ pulse · พูดเวลาแล้วทำต่อ"],
+["ตรวจร่างกาย","บอกชื่อ test + แปลผลเป็นอังกฤษ · ปกติก็ต้องพูดว่า normal"],
+["CPR","pulse ≤ 10 s · คลำได้ pulse จริงต้องตัดสินใจถูก · ลึก ≥ 5 cm 100–120/min · 30:2 · 5 cycles เปลี่ยนคน"],
+["ล้างมือ","ถอดนาฬิกา · ซอกเล็บ ข้อมือ · ~20 s รวม · 5 moments"],
+["DTX","เช็ค expiry strip · ถามกินล่าสุดเมื่อไร"],
+["Rehab","ตอบ 3 ส่วน (จุดกดทับ · การจัดเท้า · ลงมือจัดท่า) · เปลี่ยนท่าทุก 2 ชม."],
+["Smear","RBC/WBC/Plt → Dx → Ix · จับ slide clamp ตอนปรับ focus"],
+["Gram","ลักษณะ → เชื้อ → ยา"],
+["CXR","คุณภาพฟิล์ม → trachea ถึง soft tissue → DDx 2 → ตรวจต่อ"],
+["EKG","rate / rhythm / axis / abnormality / Dx"],
+["Consent / advice","ถามความเข้าใจก่อน · ตอบคำถามประจำฐาน · เปิดให้ซักถามท้ายฐาน"]];
+
+/* ===== แผน 5 ชั่วโมง ===== */
+var PLAN=[
+{t:"ฐานคงที่ — หัตถการ",m:[0,45],d:"ออกทุกชุด เสียแต้มง่ายถ้าทำไม่ทัน ฝึกพูดตามจับเวลา 5 นาที",ids:["cpr","hand","ortho","rehab","dtx"]},
+{t:"Lab — smear · Gram · CXR · EKG",m:[45,120],d:"8–9 ฐานจาก 20 (≈ 40% ของข้อสอบ) ออกครบทุกชุด",ids:["pbs","gram","cxr","ekg"]},
+{t:"ซักประวัติ + รายงานเคส",m:[120,195],d:"กอง 2 เคยได้ chest pain/GERD + รายงานเคส · จิตเวชออกทุกชุด",ids:["hx0","cp","report","psy","mdd","ha","sz","ruq"]},
+{t:"Advice + ตรวจร่างกาย",m:[195,240],d:"HIV · G6PD · cerebellar (กอง 2–3) · abdomen · respiratory",ids:["hiv","g6pd","cereb","abd","resp"]},
+{t:"อ่านผ่านฐานโอกาสต่ำ",m:[240,270],d:"≤ 20% ต่อเรื่อง อ่านหนึ่งรอบพอ",ids:["fever","edema","hxo","mi","ng","ngf","advo","motor","cvs","iv","cpt","stool"]},
+{t:"ทวนข้อที่พลาด + กับดัก + ตัวเลข",m:[270,300],d:"Quick drill เฉพาะข้อผิด → กับดัก → ตัวเลข",ids:[]}];
+
+
+(function(){
+var KEY='osceDrill.v1';
+var CAT={proc:'หัตถการ',hx:'ซักประวัติ',adv:'Advice/Consent',pe:'ตรวจร่างกาย',lab:'Lab',num:'ตัวเลข'};
+var P=load();
+function load(){var x=null;try{x=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}if(!x||x.v!==1)x={v:1};
+x.seen=x.seen||{};x.sp=x.sp||{};x.c=x.c||{};x.tr=x.tr||{};if(!('t0' in x))x.t0=null;return x;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P));}catch(e){}}
+
+/* ---- index ---- */
+var SM={},ORDER=[],CARDS=[],CM={};
+S.forEach(function(s){SM[s.id]=s;s.items=[];var k=0;
+ s.st.forEach(function(sec){sec[1].forEach(function(it){var p=it.split('::');s.items.push({sec:sec[0],cue:p.length>1?p[0]:'',ans:p.length>1?p[1]:p[0],i:k++});});});
+ s.qa.forEach(function(q,i){var c={id:s.id+':'+i,q:q[0],a:q[1],cat:s.cat,sid:s.id,deck:s.t};CARDS.push(c);CM[c.id]=c;});
+ s.blob=strip([s.t,s.sc,s.fq].concat(s.items.map(function(x){return x.cue+' '+x.ans+' '+x.sec;}),s.qa.map(function(q){return q.join(' ');}),s.tr).join(' ')).toLowerCase();
+});
+NUMS.forEach(function(n,i){var c={id:'num:'+i,q:'ตัวเลข: '+n[0],a:n[1],cat:'num',sid:null,deck:'ตัวเลขต้องจำ'};CARDS.push(c);CM[c.id]=c;});
+PLAN.forEach(function(b){b.ids.forEach(function(id){ORDER.push(id);});});
+function strip(h){return String(h).replace(/<[^>]+>/g,'');}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function stStat(s){var m=P.sp[s.id]||{},g=0,ok=0;for(var i=0;i<s.items.length;i++){if(m[i]!==undefined){g++;if(m[i])ok++;}}return {n:s.items.length,g:g,ok:ok};}
+function stLabel(s){var t=stStat(s);
+ if(t.g===0)return P.seen[s.id]?'<span class="stt seen">อ่านแล้ว</span>':'<span class="stt no">—</span>';
+ var pc=Math.round(100*t.ok/t.n);
+ if(t.g===t.n&&pc>=80)return '<span class="stt ok">✓ '+pc+'%</span>';
+ return '<span class="stt part">'+pc+'%</span>';}
+function chCls(c){return c>=80?'hot':(c>=40?'mid':'low');}
+function chBadge(s){return '<span class="ch '+chCls(s.ch)+'">'+(s.ch>=90?'≥90':'~'+s.ch)+'%</span>';}
+function rowHtml(s){var t=stStat(s);return '<a class="row" href="#/s/'+s.id+'">'+chBadge(s)+'<span class="tx">'+esc(s.t)+'<small>'+CAT[s.cat]+' · ออก '+esc(s.fq)+' · '+t.n+' ข้อ · Q&amp;A '+s.qa.length+'</small></span>'+stLabel(s)+'</a>';}
+function fmtM(m){var h=Math.floor(m/60),mm=m%60;return h+':'+(mm<10?'0':'')+mm;}
+function passed(s){var t=stStat(s);return t.g===t.n&&t.ok/t.n>=0.8;}
+
+/* ---- router ---- */
+var app=document.getElementById('app');
+function route(){var h=(location.hash||'').replace(/^#\/?/,'');return h.split('/');}
+function go(h){if(location.hash==='#'+h)render();else location.hash=h;}
+window.addEventListener('hashchange',function(){render();window.scrollTo(0,0);});
+
+var R=null,D=null,DS={cat:'all',st:'all',sh:true};
+
+function render(){var r=route();
+ if(r[0]==='s'&&SM[r[1]]){var s=SM[r[1]];P.seen[s.id]=P.seen[s.id]||Date.now();save();
+  if(r[2]==='recall')return vRecall(s);if(r[2]==='qa')return vQA(s);return vRead(s);}
+ if(r[0]==='drill')return vDrill();
+ if(r[0]==='traps')return vTraps();
+ if(r[0]==='nums')return vNums();
+ return vHome();}
+
+/* ---- home ---- */
+var sq='';
+function vHome(){
+ var nPass=0,nSeen=0;S.forEach(function(s){if(passed(s))nPass++;if(P.seen[s.id])nSeen++;});
+ var cOk=0,cBad=0;CARDS.forEach(function(c){if(P.c[c.id]===1)cOk++;else if(P.c[c.id]===0)cBad++;});
+ var trN=0;for(var k in P.tr)if(P.tr[k])trN++;
+ var h='<h1>🩺 OSCE MED Y4 · ทวน 5 ชั่วโมง</h1><div class="sub">เก็ง MED51 กอง 2 · '+S.length+' ฐาน · อ่าน → Recall ลำดับ → Q&amp;A · ความคืบหน้าเก็บในเครื่องนี้</div>';
+ h+='<div class="panel" id="clock"></div>';
+ h+='<div class="modes">'+
+  '<a class="mode" href="#/drill"><div class="ic">🃏</div><b>Quick drill</b><span>'+CARDS.length+' ใบ · ถูก '+cOk+'</span></a>'+
+  '<a class="mode" href="#/drill" id="mWrong"><div class="ic">🎯</div><b>ข้อที่ผิด</b><span>'+cBad+' ใบ</span></a>'+
+  '<a class="mode" href="#/traps"><div class="ic">⚠️</div><b>กับดัก</b><span>ติ๊กแล้ว '+trN+'/'+TRAPS.length+'</span></a>'+
+  '<a class="mode" href="#/nums"><div class="ic">🔢</div><b>ตัวเลขต้องจำ</b><span>'+NUMS.length+' หัวข้อ</span></a></div>';
+ h+='<div class="panel"><div class="stat"><span>Recall ผ่าน ≥ 80%</span><span>'+nPass+'/'+S.length+' ฐาน · เปิดอ่านแล้ว '+nSeen+'</span></div>'+
+  '<div class="bar"><i class="g" style="width:'+(100*nPass/S.length)+'%"></i></div>'+
+  '<div class="stat" style="margin-top:6px"><span>Q&amp;A ถูก / ผิด</span><span>'+cOk+' / '+cBad+' จาก '+CARDS.length+'</span></div>'+
+  '<div class="bar"><i class="g" style="width:'+(100*cOk/CARDS.length)+'%"></i><i class="r" style="width:'+(100*cBad/CARDS.length)+'%"></i></div></div>';
+ h+='<input class="search" id="q" placeholder="🔍 ค้นทุกฐาน เช่น Murphy, Sokolow, residual, ยาบ้า" value="'+esc(sq)+'">';
+ h+='<div id="list"></div>';
+ h+='<div class="panel small">ที่มา: สรุปเก็งข้อสอบของเพื่อน (11 ชุดข้อสอบเก่า) + โน้ตรุ่นพี่ · % = โอกาสออกที่เพื่อนประเมินจากแพทเทิร์น ไม่ใช่ข้อมูลทางการ · บางส่วนเติมจากความรู้ทั่วไป ให้ยึดตามที่อาจารย์สอน'+
+  '<br><button class="reset" id="rst">ล้างความคืบหน้าทั้งหมด</button></div>';
+ app.innerHTML=h;
+ document.getElementById('mWrong').onclick=function(e){e.preventDefault();DS={cat:'all',st:'wrong',sh:true};D=null;go('/drill');};
+ var q=document.getElementById('q');q.oninput=function(){sq=q.value;drawList();};
+ document.getElementById('rst').onclick=function(){if(confirm('ล้างความคืบหน้าทั้งหมด (recall, Q&A, กับดัก, เวลา)?')){P={v:1,seen:{},sp:{},c:{},tr:{},t0:null};save();R=null;D=null;render();}};
+ drawClock();drawList();}
+
+function curBlock(){if(!P.t0)return -1;var e=(Date.now()-P.t0)/60000;for(var i=0;i<PLAN.length;i++)if(e>=PLAN[i].m[0]&&e<PLAN[i].m[1])return i;return e>=300?99:-1;}
+function drawClock(){var el=document.getElementById('clock');if(!el)return;var h;
+ if(!P.t0){h='<b>แผน 5 ชั่วโมง</b><div class="small">กดเริ่มเมื่อพร้อม ระบบจะไฮไลต์ช่วงที่ควรอ่านตามเวลาจริง (ต่อจากเดิมได้แม้ปิดหน้า)</div><button class="btn" id="t0">▶ เริ่มนับ 5 ชั่วโมง</button>';}
+ else{var e=Math.floor((Date.now()-P.t0)/60000),rem=300-e,b=curBlock();
+  h='<div class="stat"><span>'+(rem>0?'เหลือเวลา':'ครบ 5 ชั่วโมงแล้ว')+'</span><span>ผ่านไป '+fmtM(Math.max(0,e))+' ชม.</span></div>'+
+   '<div class="clockbig">'+(rem>0?fmtM(rem)+' ชม.':'สู้ ๆ 💪')+'</div>'+
+   (b>=0&&b<PLAN.length?'<div class="small">ตอนนี้ควรอยู่ช่วงที่ '+(b+1)+': <b style="color:var(--tx)">'+esc(PLAN[b].t)+'</b></div>':'')+
+   '<div class="bar"><i class="g" style="width:'+Math.min(100,100*e/300)+'%"></i></div><button class="reset" id="t0r">รีเซ็ตเวลา</button>';}
+ el.innerHTML=h;
+ var a=document.getElementById('t0');if(a)a.onclick=function(){P.t0=Date.now();save();drawClock();drawList();};
+ var b2=document.getElementById('t0r');if(b2)b2.onclick=function(){if(confirm('รีเซ็ตเวลา 5 ชั่วโมง?')){P.t0=null;save();drawClock();drawList();}};}
+
+function drawList(){var el=document.getElementById('list');if(!el)return;var h='';
+ var q=sq.trim().toLowerCase();
+ if(q){var res=S.filter(function(s){return s.blob.indexOf(q)>=0;});
+  h='<div class="panel"><div class="bh"><b>ผลค้นหา “'+esc(sq)+'”</b><span class="bp">'+res.length+' ฐาน</span></div>'+(res.length?res.map(rowHtml).join(''):'<div class="small">ไม่พบ</div>')+'</div>';
+  el.innerHTML=h;return;}
+ var cb=curBlock();
+ PLAN.forEach(function(b,bi){var done=0;b.ids.forEach(function(id){if(passed(SM[id]))done++;});
+  h+='<div class="panel'+(bi===cb?' now':'')+'"><div class="bh"><span class="tm">'+fmtM(b.m[0])+'–'+fmtM(b.m[1])+'</span><b>'+(bi+1)+'. '+esc(b.t)+'</b>'+(b.ids.length?'<span class="bp">'+done+'/'+b.ids.length+'</span>':'')+'</div>'+
+   '<div class="bd">'+esc(b.d)+'</div>';
+  b.ids.forEach(function(id){h+=rowHtml(SM[id]);});
+  if(!b.ids.length)h+='<a class="btn sm" href="#/drill" id="bWrong">🎯 Drill ข้อที่ผิด</a><a class="btn sm ghost" href="#/traps">⚠️ กับดัก</a><a class="btn sm ghost" href="#/nums">🔢 ตัวเลข</a><a class="btn sm ghost" href="#/drill">🃏 สุ่มทั้งหมด</a>';
+  h+='</div>';});
+ el.innerHTML=h;
+ var bw=document.getElementById('bWrong');if(bw)bw.onclick=function(e){e.preventDefault();DS={cat:'all',st:'wrong',sh:true};D=null;go('/drill');};}
+setInterval(function(){if(route()[0]===''&&document.getElementById('clock')){drawClock();var q=document.getElementById('q');if(!q||!q.value)drawList();}},30000);
+
+/* ---- station header ---- */
+function head(s,tab){var t=stStat(s);
+ return '<div class="top"><a class="back" href="#/">← หน้าแรก</a><h2>'+esc(s.t)+'</h2>'+chBadge(s)+'</div>'+
+ '<div class="small">'+CAT[s.cat]+' · ออก '+esc(s.fq)+' · recall ล่าสุด '+t.ok+'/'+t.n+(t.g<t.n&&t.g>0?' (ทำไป '+t.g+')':'')+'</div>'+
+ '<div class="tabs"><a class="tab'+(tab==='read'?' on':'')+'" href="#/s/'+s.id+'">📖 อ่าน</a>'+
+ '<a class="tab'+(tab==='recall'?' on':'')+'" href="#/s/'+s.id+'/recall">🧠 Recall ('+t.n+')</a>'+
+ '<a class="tab'+(tab==='qa'?' on':'')+'" href="#/s/'+s.id+'/qa">🃏 Q&amp;A ('+s.qa.length+')</a>'+
+ '<button class="tab tmr" id="tmr">⏱ 5:00</button></div>';}
+function bindHead(){var b=document.getElementById('tmr');if(b)b.onclick=startTimer;}
+
+function vRead(s){var m=P.sp[s.id]||{};
+ var h=head(s,'read');
+ h+='<div class="script"><span class="lab">เปิดฐาน / โจทย์</span>'+s.sc+'</div>';
+ var cur='';
+ s.items.forEach(function(it){if(it.sec!==cur){if(cur)h+='</ol>';cur=it.sec;h+='<div class="sec">'+esc(it.sec)+'</div><ol class="it">';}
+  var cl=m[it.i]===0?'miss':(m[it.i]===1?'hit':'');
+  h+='<li class="'+cl+'">'+(it.cue?'<span class="cue">'+it.cue+'</span> — ':'')+it.ans+'</li>';});
+ if(cur)h+='</ol>';
+ if(s.tr&&s.tr.length)h+='<div class="traps"><span class="lab">⚠️ กับดัก / เพื่อนเตือน</span><ul>'+s.tr.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+ if(s.qa.length){h+='<div class="sec">คำถามประจำฐาน / Q&amp;A</div><div class="qa">'+s.qa.map(function(q){return '<div><b class="q">'+q[0]+'</b><span>'+q[1]+'</span></div>';}).join('')+'</div>';}
+ h+='<a class="btn" href="#/s/'+s.id+'/recall">🧠 ปิดแล้ว Recall ลำดับ ('+s.items.length+' ข้อ)</a>';
+ var oi=ORDER.indexOf(s.id);if(oi>=0&&oi<ORDER.length-1){var nx=SM[ORDER[oi+1]];h+='<a class="next" href="#/s/'+nx.id+'">ฐานถัดไป: '+esc(nx.t)+' →</a>';}
+ app.innerHTML=h;
+ bindHead();}
+
+/* ---- recall ---- */
+function vRecall(s){var h=head(s,'recall');var m=P.sp[s.id]||{};
+ if(!R||R.sid!==s.id){var miss=s.items.filter(function(x){return m[x.i]===0;}).length,todo=s.items.filter(function(x){return m[x.i]===undefined;}).length;
+  h+='<div class="card"><div class="qbig">Recall ลำดับขั้นตอน</div><div class="small">ระบบจะโชว์หัวข้อ + คำใบ้ทีละข้อ ให้นึก/พูดออกเสียงก่อน แล้วกด <b>Space</b> เปิดดู จากนั้นให้คะแนนตัวเอง <b>1</b> = นึกไม่ออก · <b>2</b> = นึกออก</div>'+
+   '<button class="btn" id="rAll">เริ่มทั้งหมด ('+s.items.length+' ข้อ)</button>'+
+   (miss?'<button class="btn ghost" id="rMiss">เฉพาะข้อที่พลาด ('+miss+')</button>':'')+
+   (todo&&todo<s.items.length?'<button class="btn ghost" id="rTodo">เฉพาะข้อที่ยังไม่ทำ ('+todo+')</button>':'')+'</div>';
+  app.innerHTML=h;bindHead();
+  document.getElementById('rAll').onclick=function(){startRecall(s,s.items.map(function(x){return x.i;}));};
+  var a=document.getElementById('rMiss');if(a)a.onclick=function(){startRecall(s,s.items.filter(function(x){return m[x.i]===0;}).map(function(x){return x.i;}));};
+  var b=document.getElementById('rTodo');if(b)b.onclick=function(){startRecall(s,s.items.filter(function(x){return m[x.i]===undefined;}).map(function(x){return x.i;}));};
+  return;}
+ var dots='<div class="dots">'+R.list.map(function(ix,j){var v=R.res[ix];return '<i class="'+(j===R.k?'cur':(v===1?'g':(v===0?'r':'')))+'"></i>';}).join('')+'</div>';
+ if(R.k>=R.list.length){var ok=0,miss=[];R.list.forEach(function(ix){if(R.res[ix]===1)ok++;else miss.push(s.items[ix]);});
+  var pc=Math.round(100*ok/R.list.length);
+  h+=dots+'<div class="card sum"><div class="small">จบรอบ Recall</div><div class="big" style="color:'+(pc>=80?'var(--good)':'var(--warn)')+'">'+ok+'/'+R.list.length+'</div><div class="small">'+pc+'%</div>'+
+   (miss.length?'<div class="miss-list"><b style="color:var(--bad)">ข้อที่พลาด</b>'+miss.map(function(x){return '<div><span class="small">'+esc(x.sec)+'</span><br>'+(x.cue?'<span class="cue">'+x.cue+'</span> — ':'')+x.ans+'</div>';}).join('')+'</div>':'<div style="margin-top:8px">ครบทุกข้อ 🎉</div>')+
+   (miss.length?'<button class="btn" id="rAgain">ทวนเฉพาะข้อที่พลาด ('+miss.length+')</button>':'')+
+   '<button class="btn ghost" id="rNew">เริ่มใหม่ทั้งหมด</button>';
+  var oi=ORDER.indexOf(s.id);if(oi>=0&&oi<ORDER.length-1){var nx=SM[ORDER[oi+1]];h+='<a class="btn ghost" href="#/s/'+nx.id+'">ฐานถัดไป: '+esc(nx.t)+' →</a>';}
+  h+='</div>';app.innerHTML=h;bindHead();
+  var a2=document.getElementById('rAgain');if(a2)a2.onclick=function(){startRecall(s,miss.map(function(x){return x.i;}));};
+  document.getElementById('rNew').onclick=function(){R=null;render();};return;}
+ var it=s.items[R.list[R.k]];
+ var prev=s.items.filter(function(x){return x.sec===it.sec&&x.i<it.i;});
+ h+=dots+'<div class="card"><div class="deck">'+(R.k+1)+' / '+R.list.length+' · <span style="color:var(--gold)">'+esc(it.sec)+'</span></div>';
+ if(prev.length)h+='<div class="prevs">'+prev.map(function(x){return '<div>'+(x.cue?'<b>'+x.cue+'</b> — ':'')+strip(x.ans).slice(0,70)+(strip(x.ans).length>70?'…':'')+'</div>';}).join('')+'</div>';
+ h+='<div class="qbig">'+(it.cue?'<span class="cue">'+it.cue+'</span> → ?':'ข้อถัดไปคืออะไร?')+'</div>';
+ if(!R.shown)h+='<div class="hid" id="rev">นึก/พูดออกเสียงก่อน แล้วแตะเพื่อเปิด (Space)</div>';
+ else h+='<div class="ans">'+(it.cue?'<b>'+it.cue+'</b> — ':'')+it.ans+'</div><div class="grade"><button class="no" id="g1">✗ นึกไม่ออก (1)</button><button class="ok" id="g2">✓ นึกออก (2)</button></div>';
+ h+='<div class="keys">Space = เปิด · 1 = ✗ · 2 = ✓</div></div>';
+ app.innerHTML=h;bindHead();
+ var rv=document.getElementById('rev');if(rv)rv.onclick=revealR;
+ var g1=document.getElementById('g1');if(g1){g1.onclick=function(){gradeR(0);};document.getElementById('g2').onclick=function(){gradeR(1);};}}
+function startRecall(s,list){R={sid:s.id,list:list,k:0,shown:false,res:{}};render();}
+function revealR(){if(R&&R.k<R.list.length&&!R.shown){R.shown=true;render();}}
+function gradeR(v){if(!R||!R.shown)return;var ix=R.list[R.k];P.sp[R.sid]=P.sp[R.sid]||{};P.sp[R.sid][ix]=v;save();R.res[ix]=v;R.k++;R.shown=false;render();}
+
+/* ---- cards engine ---- */
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function vQA(s){var h=head(s,'qa');
+ if(!D||D.key!=='qa:'+s.id){D={key:'qa:'+s.id,list:s.qa.map(function(q,i){return s.id+':'+i;}),k:0,shown:false,res:{}};}
+ app.innerHTML=h+'<div id="eng"></div>';bindHead();drawEng();}
+function drillPool(){return CARDS.filter(function(c){if(DS.cat!=='all'&&c.cat!==DS.cat)return false;
+ if(DS.st==='todo')return P.c[c.id]===undefined;if(DS.st==='wrong')return P.c[c.id]===0;return true;});}
+function vDrill(){var h='<div class="top"><a class="back" href="#/">← หน้าแรก</a><h2>🃏 Quick drill</h2></div>';
+ if(!D||D.key!=='drill'){var pool=drillPool();
+  var cats=['all','proc','hx','adv','pe','lab','num'];
+  h+='<div class="card"><div class="small">หมวด</div>'+cats.map(function(c){var n=CARDS.filter(function(x){return c==='all'||x.cat===c;}).length;return '<button class="chip'+(DS.cat===c?' on':'')+'" data-c="'+c+'">'+(c==='all'?'ทั้งหมด':CAT[c])+' '+n+'</button>';}).join('')+
+   '<div class="small" style="margin-top:8px">สถานะ</div>'+[['all','ทั้งหมด'],['todo','ยังไม่ทำ'],['wrong','ทำผิด']].map(function(x){return '<button class="chip'+(DS.st===x[0]?' on':'')+'" data-s="'+x[0]+'">'+x[1]+'</button>';}).join('')+
+   '<button class="chip'+(DS.sh?' on':'')+'" id="sh">🔀 สุ่มลำดับ</button>'+
+   '<button class="btn" id="go"'+(pool.length?'':' disabled')+'>เริ่ม '+pool.length+' ใบ</button></div>';
+  app.innerHTML=h;
+  [].forEach.call(app.querySelectorAll('[data-c]'),function(b){b.onclick=function(){DS.cat=b.getAttribute('data-c');render();};});
+  [].forEach.call(app.querySelectorAll('[data-s]'),function(b){b.onclick=function(){DS.st=b.getAttribute('data-s');render();};});
+  document.getElementById('sh').onclick=function(){DS.sh=!DS.sh;render();};
+  document.getElementById('go').onclick=function(){var ids=pool.map(function(c){return c.id;});if(!ids.length)return;D={key:'drill',list:DS.sh?shuffle(ids):ids,k:0,shown:false,res:{}};render();};
+  return;}
+ app.innerHTML=h+'<div id="eng"></div>';drawEng();}
+function drawEng(){var el=document.getElementById('eng');if(!el||!D)return;
+ var dots='<div class="dots">'+D.list.map(function(id,j){var v=D.res[id];return '<i class="'+(j===D.k?'cur':(v===1?'g':(v===0?'r':'')))+'"></i>';}).join('')+'</div>';
+ if(D.k>=D.list.length){var ok=0,miss=[];D.list.forEach(function(id){if(D.res[id]===1)ok++;else miss.push(id);});
+  var pc=Math.round(100*ok/D.list.length);
+  var h=dots+'<div class="card sum"><div class="small">จบชุด</div><div class="big" style="color:'+(pc>=80?'var(--good)':'var(--warn)')+'">'+ok+'/'+D.list.length+'</div><div class="small">'+pc+'%</div>'+
+   (miss.length?'<div class="miss-list"><b style="color:var(--bad)">ข้อที่ผิด</b>'+miss.map(function(id){var c=CM[id];return '<div><span class="small">'+esc(c.deck)+'</span><br><b>'+c.q+'</b><br>'+c.a+'</div>';}).join('')+'</div>':'')+
+   (miss.length?'<button class="btn" id="dAgain">ทวนเฉพาะข้อที่ผิด ('+miss.length+')</button>':'')+
+   '<button class="btn ghost" id="dNew">'+(D.key==='drill'?'ตั้งค่าชุดใหม่':'เริ่มใหม่')+'</button></div>';
+  el.innerHTML=h;
+  var a=document.getElementById('dAgain');if(a)a.onclick=function(){D={key:D.key,list:miss,k:0,shown:false,res:{}};drawEng();};
+  document.getElementById('dNew').onclick=function(){D=null;render();};return;}
+ var c=CM[D.list[D.k]];
+ var h2=dots+'<div class="card"><div class="deck">'+(D.k+1)+' / '+D.list.length+' · '+(c.sid?'<a href="#/s/'+c.sid+'" style="color:var(--acc)">'+esc(c.deck)+'</a>':esc(c.deck))+(P.c[c.id]===0?' · <span style="color:var(--bad)">เคยผิด</span>':'')+'</div>'+
+  '<div class="qbig">'+c.q+'</div>';
+ if(!D.shown)h2+='<div class="hid" id="rev">นึกคำตอบก่อน แล้วแตะเพื่อเปิด (Space)</div>';
+ else h2+='<div class="ans">'+c.a+'</div><div class="grade"><button class="no" id="g1">✗ ผิด/ไม่ครบ (1)</button><button class="ok" id="g2">✓ ถูก (2)</button></div>';
+ h2+='<div class="keys">Space = เปิด · 1 = ✗ · 2 = ✓</div></div>';
+ el.innerHTML=h2;
+ var rv=document.getElementById('rev');if(rv)rv.onclick=revealD;
+ var g1=document.getElementById('g1');if(g1){g1.onclick=function(){gradeD(0);};document.getElementById('g2').onclick=function(){gradeD(1);};}}
+function revealD(){if(D&&D.k<D.list.length&&!D.shown){D.shown=true;drawEng();}}
+function gradeD(v){if(!D||!D.shown)return;var id=D.list[D.k];P.c[id]=v;save();D.res[id]=v;D.k++;D.shown=false;drawEng();window.scrollTo(0,0);}
+
+/* ---- traps / nums ---- */
+function vTraps(){var n=0;for(var k in P.tr)if(P.tr[k])n++;
+ var h='<div class="top"><a class="back" href="#/">← หน้าแรก</a><h2>⚠️ กับดักที่เพื่อนเจอจริง</h2></div><div class="small">อ่านวันสุดท้าย ติ๊กเมื่อมั่นใจ ('+n+'/'+TRAPS.length+')</div><div class="panel">'+
+  TRAPS.map(function(t,i){return '<div class="tick'+(P.tr[i]?' on':'')+'" data-i="'+i+'"><span class="bx">'+(P.tr[i]?'✓':'')+'</span><span class="tt"><b>'+esc(t[0])+'</b> — '+t[1]+'</span></div>';}).join('')+
+  '</div><button class="reset" id="trr">ล้างติ๊ก</button>';
+ app.innerHTML=h;
+ [].forEach.call(app.querySelectorAll('.tick'),function(el){el.onclick=function(){var i=el.getAttribute('data-i');P.tr[i]=P.tr[i]?0:1;save();vTraps();};});
+ document.getElementById('trr').onclick=function(){P.tr={};save();vTraps();};}
+function vNums(){var h='<div class="top"><a class="back" href="#/">← หน้าแรก</a><h2>🔢 ตัวเลขต้องจำ</h2></div><div class="panel"><table>'+
+  NUMS.map(function(n){return '<tr><td>'+esc(n[0])+'</td><td>'+n[1]+'</td></tr>';}).join('')+'</table></div>'+
+  '<button class="btn" id="nd">🃏 ฝึกตัวเลข ('+NUMS.length+' ใบ)</button>';
+ app.innerHTML=h;
+ document.getElementById('nd').onclick=function(){DS={cat:'num',st:'all',sh:true};var ids=CARDS.filter(function(c){return c.cat==='num';}).map(function(c){return c.id;});D={key:'drill',list:shuffle(ids),k:0,shown:false,res:{}};go('/drill');};}
+
+/* ---- 5-min timer ---- */
+var T={end:0,iv:null,warned:false},actx=null;
+var pill=document.getElementById('tpill');
+function beep(n){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();var t=actx.currentTime;
+ for(var i=0;i<n;i++){var o=actx.createOscillator(),g=actx.createGain();o.frequency.value=880;o.connect(g);g.connect(actx.destination);
+  g.gain.setValueAtTime(0.0001,t+i*0.4);g.gain.exponentialRampToValueAtTime(0.3,t+i*0.4+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.4+0.3);o.start(t+i*0.4);o.stop(t+i*0.4+0.32);}}catch(e){}
+ try{if(navigator.vibrate)navigator.vibrate(n>1?[200,100,200,100,200]:200);}catch(e){}}
+function startTimer(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+ T.end=Date.now()+300000;T.warned=false;if(T.iv)clearInterval(T.iv);T.iv=setInterval(tick,250);tick();}
+function stopTimer(){if(T.iv)clearInterval(T.iv);T.iv=null;pill.style.display='none';}
+function tick(){var rem=T.end-Date.now();pill.style.display='block';
+ if(rem<=0){pill.className='over';pill.innerHTML='หมดเวลา<small>แตะเพื่อปิด</small>';clearInterval(T.iv);T.iv=null;beep(3);return;}
+ var s=Math.ceil(rem/1000),m=Math.floor(s/60);s=s%60;
+ if(rem<=60000&&!T.warned){T.warned=true;beep(1);}
+ pill.className=rem<=60000?'warn':'';pill.innerHTML='⏱ '+m+':'+(s<10?'0':'')+s+'<small>แตะเพื่อหยุด</small>';}
+pill.onclick=stopTimer;
+
+/* ---- keys ---- */
+document.addEventListener('keydown',function(e){var tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;
+ var r=route();var k=e.key;
+ if(r[0]==='s'&&r[2]==='recall'&&R&&R.sid===r[1]&&R.k<R.list.length){
+  if(k===' '||k==='Enter'){e.preventDefault();if(!R.shown)revealR();return;}
+  if(R.shown&&(k==='1'||k==='2')){e.preventDefault();gradeR(k==='2'?1:0);}return;}
+ if(D&&document.getElementById('eng')&&D.k<D.list.length){
+  if(k===' '||k==='Enter'){e.preventDefault();if(!D.shown)revealD();return;}
+  if(D.shown&&(k==='1'||k==='2')){e.preventDefault();gradeD(k==='2'?1:0);}}});
+
+render();
+window.__osce={P:P,S:S,CARDS:CARDS,go:go,render:render,getR:function(){return R;},getD:function(){return D;},startTimer:startTimer,stopTimer:stopTimer};
+})();
+</script>
+</body>
+</html>
